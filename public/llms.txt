@@ -1,0 +1,87 @@
+# מיס לוסי — Generative Engine Optimization Map
+
+> A מזון ומסעדנות business.
+
+---
+
+## Pages
+
+### Home
+https://-6a84bc7a.zappy5.app
+
+### About
+https://-6a84bc7a.zappy5.app/about
+
+### Menu
+https://-6a84bc7a.zappy5.app/menu
+
+### Contact
+https://-6a84bc7a.zappy5.app/contact
+
+### Products
+https://-6a84bc7a.zappy5.app/products
+המוצרים שלנו - מיס לוסי
+
+### Cart
+https://-6a84bc7a.zappy5.app/cart
+עגלת הקניות שלך
+
+### Checkout
+https://-6a84bc7a.zappy5.app/checkout
+תשלום
+
+### Login
+https://-6a84bc7a.zappy5.app/login
+התחברות לקוחות
+
+### Account
+https://-6a84bc7a.zappy5.app/account
+החשבון שלי
+
+### Order Success
+https://-6a84bc7a.zappy5.app/order-success
+תודה על ההזמנה
+
+### Product Detail
+https://-6a84bc7a.zappy5.app/product/:slug
+פרטי המוצר - מיס לוסי
+
+### Category
+https://-6a84bc7a.zappy5.app/category/:slug
+מוצרים - מיס לוסי
+
+## Legal & Policy
+
+### Privacy Policy
+https://-6a84bc7a.zappy5.app/privacy
+Information about how user data is collected, stored, and protected.
+
+### Terms & Conditions
+https://-6a84bc7a.zappy5.app/terms
+Legal terms describing service usage, rights, and policies.
+
+### Accessibility Statement
+https://-6a84bc7a.zappy5.app/accessibility
+Information about WCAG compliance and accessibility features.
+
+---
+
+# Business Context (for LLM understanding)
+
+## About מיס לוסי
+מיס לוסי is a business in the מזון ומסעדנות industry.
+
+## Target Audience
+- חובבי אוכל עירוניים
+- מבקרי אירועי אוכל
+- אנשים שמודעים לבריאותם
+
+## Industry
+מזון ומסעדנות
+
+---
+
+# Additional Resources
+
+- **Sitemap**: https://-6a84bc7a.zappy5.app/sitemap.xml
+- **Robots.txt**: https://-6a84bc7a.zappy5.app/robots.txt
