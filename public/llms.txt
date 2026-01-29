@@ -1,75 +1,87 @@
-# Business — Generative Engine Optimization Map
+# מיס לוסי — Generative Engine Optimization Map
+
+> A מזון ומסעדנות business.
 
 ---
 
 ## Pages
 
 ### Home
-https://example.com
+https://miss-lucy.zappy5.app
 
 ### About
-https://example.com/about
+https://miss-lucy.zappy5.app/about
 
 ### Menu
-https://example.com/menu
+https://miss-lucy.zappy5.app/menu
 
 ### Contact
-https://example.com/contact
+https://miss-lucy.zappy5.app/contact
 
 ### Products
-https://example.com/products
+https://miss-lucy.zappy5.app/products
 המוצרים שלנו - מיס לוסי
 
 ### Cart
-https://example.com/cart
+https://miss-lucy.zappy5.app/cart
 עגלת הקניות שלך
 
 ### Checkout
-https://example.com/checkout
+https://miss-lucy.zappy5.app/checkout
 תשלום
 
 ### Login
-https://example.com/login
+https://miss-lucy.zappy5.app/login
 התחברות לקוחות
 
 ### Account
-https://example.com/account
+https://miss-lucy.zappy5.app/account
 החשבון שלי
 
 ### Order Success
-https://example.com/order-success
+https://miss-lucy.zappy5.app/order-success
 תודה על ההזמנה
 
 ### Product Detail
-https://example.com/product/:slug
+https://miss-lucy.zappy5.app/product/:slug
 פרטי המוצר - מיס לוסי
 
 ### Category
-https://example.com/category/:slug
+https://miss-lucy.zappy5.app/category/:slug
 מוצרים - מיס לוסי
 
 ## Legal & Policy
 
 ### Privacy Policy
-https://example.com/privacy
+https://miss-lucy.zappy5.app/privacy
 Information about how user data is collected, stored, and protected.
 
 ### Terms & Conditions
-https://example.com/terms
+https://miss-lucy.zappy5.app/terms
 Legal terms describing service usage, rights, and policies.
 
 ### Accessibility Statement
-https://example.com/accessibility
+https://miss-lucy.zappy5.app/accessibility
 Information about WCAG compliance and accessibility features.
 
 ---
 
 # Business Context (for LLM understanding)
 
-## About Business
+## About מיס לוסי
+מיס לוסי is a business in the מזון ומסעדנות industry.
+
+## Target Audience
+- חובבי אוכל עירוניים
+- מבקרי אירועי אוכל
+- אנשים שמודעים לבריאותם
+
+## Industry
+מזון ומסעדנות
+
 ---
 
 # Additional Resources
 
-- **Sitemap**: https://example.com/sitemap.xml
-- **Robots.txt**: https://example.com/robots.txt
+- **Sitemap**: https://miss-lucy.zappy5.app/sitemap.xml
+- **Robots.txt**: https://miss-lucy.zappy5.app/robots.txt
