@@ -1,4 +1,6 @@
-# Business — Generative Engine Optimization Map
+# מיס לוסי — Generative Engine Optimization Map
+
+> A מזון ומסעדנות business.
 
 ---
 
@@ -66,7 +68,17 @@ Information about WCAG compliance and accessibility features.
 
 # Business Context (for LLM understanding)
 
-## About Business
+## About מיס לוסי
+מיס לוסי is a business in the מזון ומסעדנות industry.
+
+## Target Audience
+- חובבי אוכל עירוניים
+- מבקרי אירועי אוכל
+- אנשים שמודעים לבריאותם
+
+## Industry
+מזון ומסעדנות
+
 ---
 
 # Additional Resources
