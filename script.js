@@ -151,6 +151,358 @@ document.addEventListener('DOMContentLoaded', function() {
 
 });
 ;
+
+
+/* Cookie Consent */
+
+// Helper function to check cookie consent
+function hasConsentFor(category) {
+  if (typeof window.CookieConsent === 'undefined') {
+    return false; // Default to no consent if cookie consent not loaded
+  }
+  
+  return window.CookieConsent.validConsent(category);
+}
+
+// Helper function to execute code only with consent
+function withConsent(category, callback) {
+  if (hasConsentFor(category)) {
+    callback();
+  } else {
+    console.log(`[WARNING] Skipping ${category} code - no user consent`);
+  }
+}
+
+// Cookie Consent Initialization
+
+(function() {
+  'use strict';
+  
+  let initAttempts = 0;
+  const maxAttempts = 50; // 5 seconds max wait
+  
+  // Wait for DOM and vanilla-cookieconsent to be ready
+  function initCookieConsent() {
+    initAttempts++;
+    
+    
+    if (typeof window.CookieConsent === 'undefined') {
+      if (initAttempts < maxAttempts) {
+        setTimeout(initCookieConsent, 100);
+      } else {
+      }
+      return;
+    }
+
+    const cc = window.CookieConsent;
+    
+    
+    // Initialize cookie consent
+    try {
+      cc.run({
+  "autoShow": true,
+  "mode": "opt-in",
+  "revision": 0,
+  "categories": {
+    "necessary": {
+      "enabled": true,
+      "readOnly": true
+    },
+    "analytics": {
+      "enabled": false,
+      "readOnly": false,
+      "autoClear": {
+        "cookies": [
+          {
+            "name": "_ga"
+          },
+          {
+            "name": "_ga_*"
+          },
+          {
+            "name": "_gid"
+          },
+          {
+            "name": "_gat"
+          }
+        ]
+      }
+    },
+    "marketing": {
+      "enabled": false,
+      "readOnly": false,
+      "autoClear": {
+        "cookies": [
+          {
+            "name": "_fbp"
+          },
+          {
+            "name": "_fbc"
+          },
+          {
+            "name": "fr"
+          }
+        ]
+      }
+    }
+  },
+  "language": {
+    "default": "he",
+    "translations": {
+      "he": {
+        "consentModal": {
+          "title": "אנחנו משתמשים בעוגיות 🍪",
+          "description": "מיס לוסי משתמש בעוגיות כדי לשפר את החוויה שלך, לנתח שימוש באתר ולסייע במאמצי השיווק שלנו.",
+          "acceptAllBtn": "אשר הכל",
+          "acceptNecessaryBtn": "רק הכרחי",
+          "showPreferencesBtn": "נהל העדפות",
+          "footer": "<a href=\"#privacy-policy\">מדיניות פרטיות</a> | <a href=\"#terms-conditions\">תנאי שימוש</a>"
+        },
+        "preferencesModal": {
+          "title": "העדפות עוגיות",
+          "acceptAllBtn": "אשר הכל",
+          "acceptNecessaryBtn": "רק הכרחי",
+          "savePreferencesBtn": "שמור העדפות",
+          "closeIconLabel": "סגור",
+          "sections": [
+            {
+              "title": "עוגיות חיוניות",
+              "description": "עוגיות אלה הכרחיות לתפקוד האתר ולא ניתן להשבית אותן.",
+              "linkedCategory": "necessary"
+            },
+            {
+              "title": "עוגיות ניתוח",
+              "description": "עוגיות אלה עוזרות לנו להבין איך המבקרים מתקשרים עם האתר שלנו.",
+              "linkedCategory": "analytics"
+            },
+            {
+              "title": "עוגיות שיווקיות",
+              "description": "עוגיות אלה משמשות להצגת פרסומות מותאמות אישית.",
+              "linkedCategory": "marketing"
+            }
+          ]
+        }
+      }
+    }
+  },
+  "guiOptions": {
+    "consentModal": {
+      "layout": "box",
+      "position": "bottom right",
+      "equalWeightButtons": true,
+      "flipButtons": false
+    },
+    "preferencesModal": {
+      "layout": "box",
+      "equalWeightButtons": true,
+      "flipButtons": false
+    }
+  }
+});
+      
+      // Optional: Handle consent changes (check if onChange is available)
+      if (typeof cc.onChange === 'function') {
+        cc.onChange(function(cookie, changed_preferences) {
+      
+      // Enable/disable analytics based on consent
+      if (changed_preferences.includes('analytics')) {
+        if (cc.validConsent('analytics')) {
+          // Enable analytics (e.g., Google Analytics)
+          // Example: gtag('consent', 'update', { analytics_storage: 'granted' });
+        } else {
+          // Example: gtag('consent', 'update', { analytics_storage: 'denied' });
+        }
+      }
+      
+      // Enable/disable marketing based on consent
+      if (changed_preferences.includes('marketing')) {
+        if (cc.validConsent('marketing')) {
+          // Example: gtag('consent', 'update', { ad_storage: 'granted' });
+        } else {
+          // Example: gtag('consent', 'update', { ad_storage: 'denied' });
+        }
+      }
+        });
+      } else {
+      }
+
+      // Note: Cookie Preferences button removed per marketing guidelines
+      // Footer should be clean and minimal - users can manage cookies via banner
+    } catch (error) {
+    }
+  }
+
+  // Initialize when DOM is ready - multiple approaches for reliability
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initCookieConsent);
+    // Backup timeout in case DOMContentLoaded doesn't fire
+    setTimeout(initCookieConsent, 1000);
+  } else if (document.readyState === 'interactive' || document.readyState === 'complete') {
+    initCookieConsent();
+  } else {
+    // Fallback - try after a short delay
+    setTimeout(initCookieConsent, 500);
+  }
+  
+  // Additional fallback - try after page load
+  if (typeof window !== 'undefined') {
+    if (window.addEventListener) {
+      window.addEventListener('load', initCookieConsent, { once: true });
+    }
+  }
+})();
+
+/* Accessibility Features */
+
+/* Mickidum Accessibility Toolbar Initialization - Zappy Style */
+
+window.onload = function() {
+    
+    try {
+        window.micAccessTool = new MicAccessTool({
+            buttonPosition: 'left', // Position on left side
+            forceLang: 'he-IL', // Force language
+            icon: {
+                position: {
+                    bottom: { size: 50, units: 'px' },
+                    left: { size: 20, units: 'px' },
+                    type: 'fixed'
+                },
+                backgroundColor: 'transparent', // Transparent to allow CSS styling
+                color: 'transparent', // Let CSS handle coloring
+                img: 'accessible',
+                circular: false // Square button for consistent styling
+            },
+            menu: {
+                dimensions: {
+                    width: { size: 300, units: 'px' },
+                    height: { size: 'auto', units: 'px' }
+                }
+            }
+        });
+        
+    } catch (error) {
+    }
+    
+    // Keyboard shortcut handler: ALT+A (Option+A on Mac) to toggle accessibility widget visibility (desktop only)
+    document.addEventListener('keydown', function(event) {
+        // Check if ALT+A is pressed (ALT on Windows/Linux, Option on Mac)
+        var isAltOrOption = event.altKey;
+        // Use event.code for reliable physical key detection (works regardless of Option key character output)
+        var isAKey = event.code === 'KeyA' || event.keyCode === 65 || event.which === 65 || 
+                      (event.key && (event.key.toLowerCase() === 'a' || event.key === 'å' || event.key === 'Å'));
+        
+        if (isAltOrOption && isAKey) {
+            // Only work on desktop (screen width > 768px)
+            if (window.innerWidth > 768) {
+                event.preventDefault();
+                event.stopPropagation();
+                
+                // Toggle visibility class on body
+                var isVisible = document.body.classList.contains('accessibility-widget-visible');
+                
+                if (isVisible) {
+                    // Hide the widget
+                    document.body.classList.remove('accessibility-widget-visible');
+                } else {
+                    // Show the widget
+                    document.body.classList.add('accessibility-widget-visible');
+                    
+                    // After a short delay, click the button to open the menu
+                    setTimeout(function() {
+                        var accessButton = document.getElementById('mic-access-tool-general-button');
+                        if (accessButton) {
+                            accessButton.click();
+                        }
+                    }, 200);
+                }
+            }
+        }
+    }, true);
+};
+
+
+// Zappy Contact Form API Integration (Fallback)
+(function() {
+    if (window.zappyContactFormLoaded) {
+        console.log('📧 Zappy contact form already loaded');
+        return;
+    }
+    window.zappyContactFormLoaded = true;
+
+    function initContactFormIntegration() {
+        console.log('📧 Zappy: Initializing contact form API integration...');
+
+        // Find the contact form (try multiple selectors for flexibility)
+        const contactForm = document.querySelector('.contact-form') || 
+                           document.querySelector('form[action*="contact"]') ||
+                           document.querySelector('form#contact') ||
+                           document.querySelector('form#contactForm') ||
+                           document.getElementById('contactForm') ||
+                           document.querySelector('section.contact form') ||
+                           document.querySelector('section#contact form') ||
+                           document.querySelector('form');
+        
+        if (!contactForm) {
+            console.log('⚠️ Zappy: No contact form found on page');
+            return;
+        }
+        
+        console.log('✅ Zappy: Contact form found:', contactForm.className || contactForm.id || 'unnamed form');
+
+        // Store original submit handler if exists
+        const originalOnSubmit = contactForm.onsubmit;
+
+    // Add Zappy API integration using capture phase to run before other handlers
+    contactForm.addEventListener('submit', async function(e) {
+        // Get form data
+        const formData = new FormData(this);
+        const data = Object.fromEntries(formData);
+
+        // Send to Zappy backend API (don't prevent default, let other handlers run)
+        try {
+            console.log('📧 Zappy: Sending contact form to backend API...');
+            const response = await fetch('http://localhost:5001/api/email/contact-form', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    websiteId: '6a84bc7a-3c3e-4866-bea4-1a5bb409df81',
+                    name: data.name || '',
+                    email: data.email || '',
+                    subject: data.subject || 'Contact Form Submission',
+                    message: data.message || '',
+                    phone: data.phone || null
+                })
+            });
+
+            const result = await response.json();
+            
+            if (result.success) {
+                console.log('✅ Zappy: Contact form data sent successfully to backend');
+            } else {
+                console.log('⚠️ Zappy: Backend returned error:', result.error);
+            }
+        } catch (error) {
+            console.error('❌ Zappy: Failed to send to backend API:', error);
+            // Don't break the existing form submission
+        }
+        }, true); // Use capture phase to run before other handlers
+
+        console.log('✅ Zappy: Contact form API integration initialized');
+    } // End of initContactFormIntegration
+    
+    // Initialize when DOM is ready
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initContactFormIntegration);
+    } else {
+        // DOM is already ready, initialize immediately
+        initContactFormIntegration();
+    }
+})();
+
+;
 /* ==ZAPPY E-COMMERCE JS START== */
 // E-commerce functionality
 (function() {
@@ -239,7 +591,19 @@ document.addEventListener('DOMContentLoaded', function() {
   if (!websiteId) return;
   
   // Translations
-  const t = {"products":"מוצרים","ourProducts":"המוצרים שלנו","featuredProducts":"מוצרים מומלצים","noFeaturedProducts":"עוד לא נבחרו מוצרים מומלצים. צפו בכל המוצרים שלנו!","featuredCategories":"קנו לפי קטגוריה","all":"הכל","featured":"מומלצים","new":"חדשים","sale":"מבצעים","loadingProducts":"טוען מוצרים...","cart":"עגלת קניות","yourCart":"עגלת הקניות שלך","emptyCart":"העגלה ריקה","total":"סה\"כ","proceedToCheckout":"המשך לתשלום","checkout":"תשלום","customerInfo":"פרטי לקוח","fullName":"שם מלא","email":"אימייל","phone":"טלפון","shippingAddress":"כתובת למשלוח","street":"רחוב ומספר","apartment":"דירה, קומה, כניסה","city":"עיר","zip":"מיקוד","shippingMethod":"שיטת משלוח","loadingShipping":"טוען שיטות משלוח...","payment":"תשלום","loadingPayment":"טוען אפשרויות תשלום...","orderSummary":"סיכום הזמנה","subtotal":"סכום ביניים","vat":"מע\"מ","vatIncluded":"כולל מע\"מ","shipping":"משלוח","discount":"הנחה","totalToPay":"סה\"כ לתשלום","placeOrder":"בצע הזמנה","login":"התחברות","customerLogin":"התחברות לקוחות","enterEmail":"הזן את כתובת האימייל שלך ונשלח לך קוד התחברות","emailAddress":"כתובת אימייל","sendCode":"שלח קוד","enterCode":"הזן את הקוד שנשלח לאימייל שלך","verificationCode":"קוד אימות","verify":"אמת","returnPolicy":"מדיניות החזרות","addToCart":"הוסף לעגלה","addedToCart":"המוצר נוסף לעגלה!","remove":"הסר","noProducts":"אין מוצרים להצגה כרגע","errorLoading":"שגיאה בטעינה","days":"ימים","currency":"₪","free":"חינם","freeAbove":"משלוח חינם מעל","noShippingMethods":"אין אפשרויות משלוח זמינות","viewAllResults":"הצג את כל התוצאות","searchProducts":"חיפוש מוצרים","productDetails":"פרטי המוצר","viewDetails":"לפרטים נוספים","inStock":"במלאי","outOfStock":"אזל מהמלאי","sku":"מק\"ט","category":"קטגוריה","relatedProducts":"מוצרים דומים","productNotFound":"המוצר לא נמצא","backToProducts":"חזרה למוצרים","quantity":"כמות","couponCode":"קוד קופון","enterCouponCode":"הזן קוד קופון","applyCoupon":"החל","removeCoupon":"הסר","couponApplied":"הקופון הוחל בהצלחה!","invalidCoupon":"קוד קופון לא תקין","couponExpired":"הקופון פג תוקף","couponMinOrder":"סכום הזמנה מינימלי","alreadyHaveAccount":"כבר יש לך חשבון?","loginHere":"התחבר כאן","loggedInAs":"מחובר כ:","logout":"התנתק","haveCouponCode":"יש לי קוד קופון","orderSuccess":"ההזמנה התקבלה!","thankYouOrder":"תודה על ההזמנה","orderNumber":"מספר הזמנה","orderConfirmation":"אישור הזמנה נשלח לאימייל שלך","orderProcessing":"ההזמנה שלך בטיפול. נעדכן אותך כשהמשלוח יצא לדרך.","continueShopping":"להמשך קניות","orderDetails":"פרטי ההזמנה","loadingOrder":"טוען פרטי הזמנה...","orderNotFound":"לא נמצאה הזמנה","orderItems":"פריטים בהזמנה","paidAmount":"סכום ששולם","myAccount":"החשבון שלי","accountWelcome":"ברוך הבא","yourOrders":"ההזמנות שלך","noOrders":"אין עדיין הזמנות","orderDate":"תאריך","orderStatus":"סטטוס","orderTotal":"סה\"כ","viewOrder":"צפה בהזמנה","statusPending":"ממתין לתשלום","statusPaid":"שולם","statusProcessing":"בטיפול","statusShipped":"נשלח","statusDelivered":"נמסר","statusCancelled":"בוטל","notLoggedIn":"לא מחובר","pleaseLogin":"יש להתחבר כדי לצפות בחשבון","personalDetails":"פרטים אישיים","editProfile":"עריכת פרופיל","name":"שם","saveChanges":"שמור שינויים","cancel":"ביטול","addresses":"כתובות","addAddress":"הוסף כתובת","editAddress":"ערוך כתובת","deleteAddress":"מחק כתובת","setAsDefault":"הגדר כברירת מחדל","defaultAddress":"כתובת ברירת מחדל","addressLabel":"שם הכתובת","home":"בית","work":"עבודה","other":"אחר","noAddresses":"אין כתובות שמורות","confirmDelete":"האם אתה בטוח שברצונך למחוק?","profileUpdated":"הפרופיל עודכן בהצלחה","addressSaved":"הכתובת נשמרה בהצלחה","addressDeleted":"הכתובת נמחקה","saving":"שומר...","selectVariant":"בחר אפשרות","variantUnavailable":"לא זמין","color":"צבע","size":"מידה","material":"חומר","style":"סגנון","weight":"משקל","capacity":"קיבולת","length":"אורך","inquiryAbout":"פנייה בנושא","sendInquiry":"שלח פנייה","callNow":"התקשר עכשיו","specifications":"מפרט טכני","businessPhone":"[business_phone]","businessEmail":"[business_email]"};
+  const t = {"products":"מוצרים","ourProducts":"המוצרים שלנו","featuredProducts":"מוצרים מומלצים","noFeaturedProducts":"עוד לא נבחרו מוצרים מומלצים. צפו בכל המוצרים שלנו!","featuredCategories":"קנו לפי קטגוריה","all":"הכל","featured":"מומלצים","new":"חדשים","sale":"מבצעים","loadingProducts":"טוען מוצרים...","cart":"עגלת קניות","yourCart":"עגלת הקניות שלך","emptyCart":"העגלה ריקה","total":"סה\"כ","proceedToCheckout":"המשך לתשלום","checkout":"תשלום","customerInfo":"פרטי לקוח","fullName":"שם מלא","email":"אימייל","phone":"טלפון","shippingAddress":"כתובת למשלוח","street":"רחוב ומספר","apartment":"דירה, קומה, כניסה","city":"עיר","zip":"מיקוד","shippingMethod":"שיטת משלוח","loadingShipping":"טוען שיטות משלוח...","payment":"תשלום","loadingPayment":"טוען אפשרויות תשלום...","orderSummary":"סיכום הזמנה","subtotal":"סכום ביניים","vat":"מע\"מ","vatIncluded":"כולל מע\"מ","shipping":"משלוח","discount":"הנחה","totalToPay":"סה\"כ לתשלום","placeOrder":"בצע הזמנה","login":"התחברות","customerLogin":"התחברות לקוחות","enterEmail":"הזן את כתובת האימייל שלך ונשלח לך קוד התחברות","emailAddress":"כתובת אימייל","sendCode":"שלח קוד","enterCode":"הזן את הקוד שנשלח לאימייל שלך","verificationCode":"קוד אימות","verify":"אמת","returnPolicy":"מדיניות החזרות","addToCart":"הוסף לעגלה","addedToCart":"המוצר נוסף לעגלה!","remove":"הסר","noProducts":"אין מוצרים להצגה כרגע","errorLoading":"שגיאה בטעינה","days":"ימים","currency":"₪","free":"חינם","freeAbove":"משלוח חינם מעל","noShippingMethods":"אין אפשרויות משלוח זמינות","viewAllResults":"הצג את כל התוצאות","searchProducts":"חיפוש מוצרים","productDetails":"פרטי המוצר","viewDetails":"לפרטים נוספים","inStock":"במלאי","outOfStock":"אזל מהמלאי","sku":"מק\"ט","category":"קטגוריה","relatedProducts":"מוצרים דומים","productNotFound":"המוצר לא נמצא","backToProducts":"חזרה למוצרים","home":"בית","quantity":"כמות","couponCode":"קוד קופון","enterCouponCode":"הזן קוד קופון","applyCoupon":"החל","removeCoupon":"הסר","couponApplied":"הקופון הוחל בהצלחה!","invalidCoupon":"קוד קופון לא תקין","couponExpired":"הקופון פג תוקף","couponMinOrder":"סכום הזמנה מינימלי","alreadyHaveAccount":"כבר יש לך חשבון?","loginHere":"התחבר כאן","loggedInAs":"מחובר כ:","logout":"התנתק","haveCouponCode":"יש לי קוד קופון","orderSuccess":"ההזמנה התקבלה!","thankYouOrder":"תודה על ההזמנה","orderNumber":"מספר הזמנה","orderConfirmation":"אישור הזמנה נשלח לאימייל שלך","orderProcessing":"ההזמנה שלך בטיפול. נעדכן אותך כשהמשלוח יצא לדרך.","continueShopping":"להמשך קניות","orderDetails":"פרטי ההזמנה","loadingOrder":"טוען פרטי הזמנה...","orderNotFound":"לא נמצאה הזמנה","orderItems":"פריטים בהזמנה","paidAmount":"סכום ששולם","myAccount":"החשבון שלי","accountWelcome":"ברוך הבא","yourOrders":"ההזמנות שלך","noOrders":"אין עדיין הזמנות","orderDate":"תאריך","orderStatus":"סטטוס","orderTotal":"סה\"כ","viewOrder":"צפה בהזמנה","statusPending":"ממתין לתשלום","statusPaid":"שולם","statusProcessing":"בטיפול","statusShipped":"נשלח","statusDelivered":"נמסר","statusCancelled":"בוטל","notLoggedIn":"לא מחובר","pleaseLogin":"יש להתחבר כדי לצפות בחשבון","personalDetails":"פרטים אישיים","editProfile":"עריכת פרופיל","name":"שם","saveChanges":"שמור שינויים","cancel":"ביטול","addresses":"כתובות","addAddress":"הוסף כתובת","editAddress":"ערוך כתובת","deleteAddress":"מחק כתובת","setAsDefault":"הגדר כברירת מחדל","defaultAddress":"כתובת ברירת מחדל","addressLabel":"שם הכתובת","work":"עבודה","other":"אחר","noAddresses":"אין כתובות שמורות","confirmDelete":"האם אתה בטוח שברצונך למחוק?","profileUpdated":"הפרופיל עודכן בהצלחה","addressSaved":"הכתובת נשמרה בהצלחה","addressDeleted":"הכתובת נמחקה","saving":"שומר...","selectVariant":"בחר אפשרות","variantUnavailable":"לא זמין","color":"צבע","size":"מידה","material":"חומר","style":"סגנון","weight":"משקל","capacity":"קיבולת","length":"אורך","inquiryAbout":"פנייה בנושא","sendInquiry":"שלח פנייה","callNow":"התקשר עכשיו","specifications":"מפרט טכני","businessPhone":"[business_phone]","businessEmail":"[business_email]"};
+  
+  // Helper to get localized e-commerce UI text
+  // Tries zappyI18n first for multilingual support, falls back to static t object
+  function getEcomText(key, fallback) {
+    if (typeof zappyI18n !== 'undefined' && typeof zappyI18n.t === 'function') {
+      var translated = zappyI18n.t('ecom_' + key);
+      if (translated && translated !== 'ecom_' + key) {
+        return translated;
+      }
+    }
+    return fallback;
+  }
   
   // RTL detection (based on HTML lang attribute or document direction)
   const htmlLang = document.documentElement.lang || '';
@@ -347,7 +711,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     if (categoryId) {
       try {
-        const catRes = await fetch(buildApiUrl('/api/ecommerce/storefront/categories?websiteId=' + websiteId));
+        const catRes = await fetch(buildApiUrlWithLang('/api/ecommerce/storefront/categories?websiteId=' + websiteId));
         const catData = await catRes.json();
         if (catData.success && catData.data) {
           const category = catData.data.find(function(c) { return c.id === categoryId; });
@@ -394,8 +758,8 @@ document.addEventListener('DOMContentLoaded', function() {
         categoryId = pageUrl.searchParams.get('category') || categoryId;
       }
       
-      // Build API URL
-      let apiUrl = buildApiUrl('/api/ecommerce/storefront/products?websiteId=' + websiteId);
+      // Build API URL with language support for translations
+      let apiUrl = buildApiUrlWithLang('/api/ecommerce/storefront/products?websiteId=' + websiteId);
       if (categoryId) {
         apiUrl += '&categoryId=' + categoryId;
       }
@@ -517,6 +881,9 @@ document.addEventListener('DOMContentLoaded', function() {
       var cardContent = '';
       var imageHtml = imageUrl ? '<img src="' + imageUrl + '" alt="' + p.name + '">' : '<div class="no-image-placeholder">📦</div>';
       
+      // Get localized "Add to Cart" text
+      var localizedAddToCart = getEcomText('addToCart', t.addToCart);
+      
       if (productLayout === 'compact') {
         // Compact: image, name, price only
         cardContent = tagsHtml +
@@ -534,7 +901,7 @@ document.addEventListener('DOMContentLoaded', function() {
             '<p>' + (p.description || '').substring(0, 150) + (p.description?.length > 150 ? '...' : '') + '</p>' +
             '<div class="price">' + displayPrice + '</div>' +
           '</a>' +
-          '<button class="add-to-cart" onclick="event.stopPropagation(); window.zappyHandleAddToCart(' + JSON.stringify(p).replace(/"/g, '&quot;') + ')">' + t.addToCart + '</button>';
+          '<button class="add-to-cart" onclick="event.stopPropagation(); window.zappyHandleAddToCart(' + JSON.stringify(p).replace(/"/g, '&quot;') + ')">' + localizedAddToCart + '</button>';
       } else {
         // Standard (default): image, name, short description, price
         cardContent = tagsHtml +
@@ -1314,7 +1681,7 @@ document.addEventListener('DOMContentLoaded', function() {
   
   async function loadAllProductsForSearch() {
     try {
-      const res = await fetch(buildApiUrl('/api/ecommerce/storefront/products?websiteId=' + websiteId));
+      const res = await fetch(buildApiUrlWithLang('/api/ecommerce/storefront/products?websiteId=' + websiteId));
       const data = await res.json();
       if (data.success && data.data) {
         allProducts = data.data;
@@ -1398,7 +1765,16 @@ document.addEventListener('DOMContentLoaded', function() {
       btn.addEventListener('click', function() {
         const query = input.value.trim();
         if (query.length >= 2) {
-          window.location.href = '/products?search=' + encodeURIComponent(query);
+          // Check if we're in preview mode
+          const isPreview = window.location.pathname.includes('preview-fullscreen');
+          if (isPreview) {
+            const url = new URL(window.location.href);
+            url.searchParams.set('page', '/products');
+            url.searchParams.set('search', query);
+            window.location.href = url.toString();
+          } else {
+            window.location.href = '/products?search=' + encodeURIComponent(query);
+          }
         }
       });
     }
@@ -1408,7 +1784,16 @@ document.addEventListener('DOMContentLoaded', function() {
       if (e.key === 'Enter') {
         const query = this.value.trim();
         if (query.length >= 2) {
-          window.location.href = '/products?search=' + encodeURIComponent(query);
+          // Check if we're in preview mode
+          const isPreview = window.location.pathname.includes('preview-fullscreen');
+          if (isPreview) {
+            const url = new URL(window.location.href);
+            url.searchParams.set('page', '/products');
+            url.searchParams.set('search', query);
+            window.location.href = url.toString();
+          } else {
+            window.location.href = '/products?search=' + encodeURIComponent(query);
+          }
         }
       }
     });
@@ -1722,10 +2107,40 @@ document.addEventListener('DOMContentLoaded', function() {
         if (e.key === 'Enter') {
           const query = this.value.trim();
           if (query.length >= 2) {
-            window.location.href = '/products?search=' + encodeURIComponent(query);
+            // Check if we're in preview mode
+            const isPreview = window.location.pathname.includes('preview-fullscreen');
+            if (isPreview) {
+              const url = new URL(window.location.href);
+              url.searchParams.set('page', '/products');
+              url.searchParams.set('search', query);
+              window.location.href = url.toString();
+            } else {
+              window.location.href = '/products?search=' + encodeURIComponent(query);
+            }
           }
         }
       });
+      
+      // Handle mobile search submit button click
+      const submitBtn = document.getElementById('mobile-search-submit');
+      if (submitBtn) {
+        submitBtn.addEventListener('click', function(e) {
+          e.preventDefault();
+          const query = input.value.trim();
+          if (query.length >= 2) {
+            // Check if we're in preview mode
+            const isPreview = window.location.pathname.includes('preview-fullscreen');
+            if (isPreview) {
+              const url = new URL(window.location.href);
+              url.searchParams.set('page', '/products');
+              url.searchParams.set('search', query);
+              window.location.href = url.toString();
+            } else {
+              window.location.href = '/products?search=' + encodeURIComponent(query);
+            }
+          }
+        });
+      }
     }
     
     // Close panel when clicking outside
@@ -2717,6 +3132,23 @@ document.addEventListener('DOMContentLoaded', function() {
     // DOM already loaded, run immediately
     initAll();
   }
+  
+  // Register language change callback to refresh products when language changes
+  // This ensures translated product names, descriptions, etc. are displayed
+  if (typeof zappyI18n !== 'undefined' && typeof zappyI18n.onLanguageChange === 'function') {
+    zappyI18n.onLanguageChange(function(newLang, oldLang) {
+      console.log('[E-COMMERCE MAIN] Language changed from ' + oldLang + ' to ' + newLang + ', refreshing products...');
+      
+      // Refresh products listing with translated content
+      loadProducts();
+      
+      // Also refresh search results if any products were loaded for search
+      if (typeof loadAllProductsForSearch === 'function') {
+        loadAllProductsForSearch();
+      }
+    });
+    console.log('[E-COMMERCE MAIN] Registered language change callback for products refresh');
+  }
 })();
 
 ;
@@ -2740,25 +3172,172 @@ function buildApiUrl(path) {
   return apiBase ? apiBase + path : path;
 }
 
+// Get current language for API calls (uses i18next if available, falls back to HTML lang attribute)
+function getCurrentLanguage() {
+  // Try i18next first (if multilingual site)
+  if (typeof i18next !== 'undefined' && i18next.language) {
+    return i18next.language;
+  }
+  // Fall back to HTML lang attribute
+  var htmlLang = document.documentElement.getAttribute('lang');
+  if (htmlLang) {
+    return htmlLang;
+  }
+  return null;
+}
+
+// Build API URL with language parameter for e-commerce translations
+function buildApiUrlWithLang(path) {
+  var url = buildApiUrl(path);
+  var lang = getCurrentLanguage();
+  if (lang) {
+    // Add lang parameter to URL
+    url += (url.indexOf('?') === -1 ? '?' : '&') + 'lang=' + encodeURIComponent(lang);
+  }
+  return url;
+}
+
 // Store settings for this section
 let additionalJsProductLayout = 'standard';
 let additionalJsSettingsFetched = false;
 
-async function fetchAdditionalJsSettings() {
-  if (additionalJsSettingsFetched) return;
+// Fetch store settings (announcement bar, product layout, etc.)
+// Pass force=true to bypass the cache and re-fetch (e.g., when language changes)
+async function fetchAdditionalJsSettings(force) {
+  if (additionalJsSettingsFetched && !force) return;
   const websiteId = window.ZAPPY_WEBSITE_ID;
   if (!websiteId) return;
   try {
-    const res = await fetch(buildApiUrl('/api/ecommerce/storefront/settings?websiteId=' + websiteId));
+    const res = await fetch(buildApiUrlWithLang('/api/ecommerce/storefront/settings?websiteId=' + websiteId));
     const data = await res.json();
     if (data.success && data.data) {
       if (data.data.productLayout) {
         additionalJsProductLayout = data.data.productLayout;
       }
+      // Handle dynamic announcement bar
+      handleDynamicAnnouncementBar(data.data.announcementBar);
       additionalJsSettingsFetched = true;
     }
   } catch (e) {
     console.warn('Failed to fetch store settings:', e);
+  }
+}
+
+// Dynamically create/update/remove announcement bar based on settings
+function handleDynamicAnnouncementBar(settings) {
+  var existingBar = document.querySelector('.zappy-announcement-bar');
+  
+  // If disabled or no messages, remove existing bar
+  if (!settings) {
+    if (existingBar) {
+      existingBar.remove();
+      var styleTag = document.getElementById('zappy-announcement-bar-style');
+      if (styleTag) styleTag.remove();
+    }
+    return;
+  }
+  if (!settings.enabled) {
+    if (existingBar) {
+      existingBar.remove();
+      var styleTag2 = document.getElementById('zappy-announcement-bar-style');
+      if (styleTag2) styleTag2.remove();
+    }
+    return;
+  }
+  if (!settings.messages) {
+    if (existingBar) {
+      existingBar.remove();
+      var styleTag3 = document.getElementById('zappy-announcement-bar-style');
+      if (styleTag3) styleTag3.remove();
+    }
+    return;
+  }
+  if (settings.messages.length === 0) {
+    if (existingBar) {
+      existingBar.remove();
+      var styleTag4 = document.getElementById('zappy-announcement-bar-style');
+      if (styleTag4) styleTag4.remove();
+    }
+    return;
+  }
+  
+  // Filter out empty messages
+  var messages = [];
+  for (var i = 0; i < settings.messages.length; i++) {
+    var m = settings.messages[i];
+    if (m) {
+      var trimmed = m.trim();
+      if (trimmed !== '') {
+        messages.push(m);
+      }
+    }
+  }
+  if (messages.length === 0) {
+    if (existingBar) existingBar.remove();
+    return;
+  }
+  
+  var bgColor = settings.bgColor || '#000000';
+  var textColor = settings.textColor || '#ffffff';
+  var interval = settings.interval || 4000;
+  
+  // Create or update announcement bar
+  if (!existingBar) {
+    // Add CSS if not already present
+    if (!document.getElementById('zappy-announcement-bar-style')) {
+      var style = document.createElement('style');
+      style.id = 'zappy-announcement-bar-style';
+      style.textContent = '.zappy-announcement-bar { ' +
+        'background-color: ' + bgColor + '; ' +
+        'color: ' + textColor + '; ' +
+        'position: fixed; top: 0; left: 0; right: 0; width: 100%; ' +
+        'text-align: center; padding: 10px 20px; font-size: 14px; ' +
+        'font-weight: 500; line-height: 1.4; box-sizing: border-box; ' +
+        'z-index: 1001; min-height: 40px; display: flex; ' +
+        'align-items: center; justify-content: center; ' +
+      '} ' +
+      '.zappy-announcement-bar .zappy-announcement-message { ' +
+        'position: absolute; opacity: 0; transition: opacity 0.5s ease-in-out; ' +
+        'width: 100%; left: 0; right: 0; padding: 0 20px; box-sizing: border-box; ' +
+      '} ' +
+      '.zappy-announcement-bar .zappy-announcement-message.active { opacity: 1; }';
+      document.head.appendChild(style);
+    }
+    
+    // Create announcement bar HTML
+    var bar = document.createElement('div');
+    bar.className = 'zappy-announcement-bar';
+    var messagesHtml = '';
+    for (var j = 0; j < messages.length; j++) {
+      var msg = messages[j];
+      var escapedMsg = msg.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      var activeClass = (j === 0) ? ' active' : '';
+      messagesHtml += '<span class="zappy-announcement-message' + activeClass + '">' + escapedMsg + '</span>';
+    }
+    bar.innerHTML = messagesHtml;
+    
+    // Insert at start of body
+    document.body.insertBefore(bar, document.body.firstChild);
+    
+    // Set up rotation if multiple messages
+    if (messages.length > 1) {
+      var currentIndex = 0;
+      setInterval(function() {
+        var allMsgs = bar.querySelectorAll('.zappy-announcement-message');
+        allMsgs[currentIndex].classList.remove('active');
+        currentIndex = (currentIndex + 1) % allMsgs.length;
+        allMsgs[currentIndex].classList.add('active');
+      }, interval);
+    }
+    
+    // Trigger layout recalculation for fixed headers
+    if (typeof setupFixedHeaders === 'function') {
+      setTimeout(setupFixedHeaders, 100);
+    }
+  } else {
+    // Update existing bar colors and messages
+    existingBar.style.backgroundColor = bgColor;
+    existingBar.style.color = textColor;
   }
 }
 
@@ -2773,11 +3352,11 @@ async function loadFeaturedProducts() {
   // Ensure store settings are loaded first (for productLayout)
   await fetchAdditionalJsSettings();
   
-  const t = {"products":"מוצרים","ourProducts":"המוצרים שלנו","featuredProducts":"מוצרים מומלצים","noFeaturedProducts":"עוד לא נבחרו מוצרים מומלצים. צפו בכל המוצרים שלנו!","featuredCategories":"קנו לפי קטגוריה","all":"הכל","featured":"מומלצים","new":"חדשים","sale":"מבצעים","loadingProducts":"טוען מוצרים...","cart":"עגלת קניות","yourCart":"עגלת הקניות שלך","emptyCart":"העגלה ריקה","total":"סה\"כ","proceedToCheckout":"המשך לתשלום","checkout":"תשלום","customerInfo":"פרטי לקוח","fullName":"שם מלא","email":"אימייל","phone":"טלפון","shippingAddress":"כתובת למשלוח","street":"רחוב ומספר","apartment":"דירה, קומה, כניסה","city":"עיר","zip":"מיקוד","shippingMethod":"שיטת משלוח","loadingShipping":"טוען שיטות משלוח...","payment":"תשלום","loadingPayment":"טוען אפשרויות תשלום...","orderSummary":"סיכום הזמנה","subtotal":"סכום ביניים","vat":"מע\"מ","vatIncluded":"כולל מע\"מ","shipping":"משלוח","discount":"הנחה","totalToPay":"סה\"כ לתשלום","placeOrder":"בצע הזמנה","login":"התחברות","customerLogin":"התחברות לקוחות","enterEmail":"הזן את כתובת האימייל שלך ונשלח לך קוד התחברות","emailAddress":"כתובת אימייל","sendCode":"שלח קוד","enterCode":"הזן את הקוד שנשלח לאימייל שלך","verificationCode":"קוד אימות","verify":"אמת","returnPolicy":"מדיניות החזרות","addToCart":"הוסף לעגלה","addedToCart":"המוצר נוסף לעגלה!","remove":"הסר","noProducts":"אין מוצרים להצגה כרגע","errorLoading":"שגיאה בטעינה","days":"ימים","currency":"₪","free":"חינם","freeAbove":"משלוח חינם מעל","noShippingMethods":"אין אפשרויות משלוח זמינות","viewAllResults":"הצג את כל התוצאות","searchProducts":"חיפוש מוצרים","productDetails":"פרטי המוצר","viewDetails":"לפרטים נוספים","inStock":"במלאי","outOfStock":"אזל מהמלאי","sku":"מק\"ט","category":"קטגוריה","relatedProducts":"מוצרים דומים","productNotFound":"המוצר לא נמצא","backToProducts":"חזרה למוצרים","quantity":"כמות","couponCode":"קוד קופון","enterCouponCode":"הזן קוד קופון","applyCoupon":"החל","removeCoupon":"הסר","couponApplied":"הקופון הוחל בהצלחה!","invalidCoupon":"קוד קופון לא תקין","couponExpired":"הקופון פג תוקף","couponMinOrder":"סכום הזמנה מינימלי","alreadyHaveAccount":"כבר יש לך חשבון?","loginHere":"התחבר כאן","loggedInAs":"מחובר כ:","logout":"התנתק","haveCouponCode":"יש לי קוד קופון","orderSuccess":"ההזמנה התקבלה!","thankYouOrder":"תודה על ההזמנה","orderNumber":"מספר הזמנה","orderConfirmation":"אישור הזמנה נשלח לאימייל שלך","orderProcessing":"ההזמנה שלך בטיפול. נעדכן אותך כשהמשלוח יצא לדרך.","continueShopping":"להמשך קניות","orderDetails":"פרטי ההזמנה","loadingOrder":"טוען פרטי הזמנה...","orderNotFound":"לא נמצאה הזמנה","orderItems":"פריטים בהזמנה","paidAmount":"סכום ששולם","myAccount":"החשבון שלי","accountWelcome":"ברוך הבא","yourOrders":"ההזמנות שלך","noOrders":"אין עדיין הזמנות","orderDate":"תאריך","orderStatus":"סטטוס","orderTotal":"סה\"כ","viewOrder":"צפה בהזמנה","statusPending":"ממתין לתשלום","statusPaid":"שולם","statusProcessing":"בטיפול","statusShipped":"נשלח","statusDelivered":"נמסר","statusCancelled":"בוטל","notLoggedIn":"לא מחובר","pleaseLogin":"יש להתחבר כדי לצפות בחשבון","personalDetails":"פרטים אישיים","editProfile":"עריכת פרופיל","name":"שם","saveChanges":"שמור שינויים","cancel":"ביטול","addresses":"כתובות","addAddress":"הוסף כתובת","editAddress":"ערוך כתובת","deleteAddress":"מחק כתובת","setAsDefault":"הגדר כברירת מחדל","defaultAddress":"כתובת ברירת מחדל","addressLabel":"שם הכתובת","home":"בית","work":"עבודה","other":"אחר","noAddresses":"אין כתובות שמורות","confirmDelete":"האם אתה בטוח שברצונך למחוק?","profileUpdated":"הפרופיל עודכן בהצלחה","addressSaved":"הכתובת נשמרה בהצלחה","addressDeleted":"הכתובת נמחקה","saving":"שומר...","selectVariant":"בחר אפשרות","variantUnavailable":"לא זמין","color":"צבע","size":"מידה","material":"חומר","style":"סגנון","weight":"משקל","capacity":"קיבולת","length":"אורך","inquiryAbout":"פנייה בנושא","sendInquiry":"שלח פנייה","callNow":"התקשר עכשיו","specifications":"מפרט טכני","businessPhone":"[business_phone]","businessEmail":"[business_email]"};
+  const t = {"products":"מוצרים","ourProducts":"המוצרים שלנו","featuredProducts":"מוצרים מומלצים","noFeaturedProducts":"עוד לא נבחרו מוצרים מומלצים. צפו בכל המוצרים שלנו!","featuredCategories":"קנו לפי קטגוריה","all":"הכל","featured":"מומלצים","new":"חדשים","sale":"מבצעים","loadingProducts":"טוען מוצרים...","cart":"עגלת קניות","yourCart":"עגלת הקניות שלך","emptyCart":"העגלה ריקה","total":"סה\"כ","proceedToCheckout":"המשך לתשלום","checkout":"תשלום","customerInfo":"פרטי לקוח","fullName":"שם מלא","email":"אימייל","phone":"טלפון","shippingAddress":"כתובת למשלוח","street":"רחוב ומספר","apartment":"דירה, קומה, כניסה","city":"עיר","zip":"מיקוד","shippingMethod":"שיטת משלוח","loadingShipping":"טוען שיטות משלוח...","payment":"תשלום","loadingPayment":"טוען אפשרויות תשלום...","orderSummary":"סיכום הזמנה","subtotal":"סכום ביניים","vat":"מע\"מ","vatIncluded":"כולל מע\"מ","shipping":"משלוח","discount":"הנחה","totalToPay":"סה\"כ לתשלום","placeOrder":"בצע הזמנה","login":"התחברות","customerLogin":"התחברות לקוחות","enterEmail":"הזן את כתובת האימייל שלך ונשלח לך קוד התחברות","emailAddress":"כתובת אימייל","sendCode":"שלח קוד","enterCode":"הזן את הקוד שנשלח לאימייל שלך","verificationCode":"קוד אימות","verify":"אמת","returnPolicy":"מדיניות החזרות","addToCart":"הוסף לעגלה","addedToCart":"המוצר נוסף לעגלה!","remove":"הסר","noProducts":"אין מוצרים להצגה כרגע","errorLoading":"שגיאה בטעינה","days":"ימים","currency":"₪","free":"חינם","freeAbove":"משלוח חינם מעל","noShippingMethods":"אין אפשרויות משלוח זמינות","viewAllResults":"הצג את כל התוצאות","searchProducts":"חיפוש מוצרים","productDetails":"פרטי המוצר","viewDetails":"לפרטים נוספים","inStock":"במלאי","outOfStock":"אזל מהמלאי","sku":"מק\"ט","category":"קטגוריה","relatedProducts":"מוצרים דומים","productNotFound":"המוצר לא נמצא","backToProducts":"חזרה למוצרים","home":"בית","quantity":"כמות","couponCode":"קוד קופון","enterCouponCode":"הזן קוד קופון","applyCoupon":"החל","removeCoupon":"הסר","couponApplied":"הקופון הוחל בהצלחה!","invalidCoupon":"קוד קופון לא תקין","couponExpired":"הקופון פג תוקף","couponMinOrder":"סכום הזמנה מינימלי","alreadyHaveAccount":"כבר יש לך חשבון?","loginHere":"התחבר כאן","loggedInAs":"מחובר כ:","logout":"התנתק","haveCouponCode":"יש לי קוד קופון","orderSuccess":"ההזמנה התקבלה!","thankYouOrder":"תודה על ההזמנה","orderNumber":"מספר הזמנה","orderConfirmation":"אישור הזמנה נשלח לאימייל שלך","orderProcessing":"ההזמנה שלך בטיפול. נעדכן אותך כשהמשלוח יצא לדרך.","continueShopping":"להמשך קניות","orderDetails":"פרטי ההזמנה","loadingOrder":"טוען פרטי הזמנה...","orderNotFound":"לא נמצאה הזמנה","orderItems":"פריטים בהזמנה","paidAmount":"סכום ששולם","myAccount":"החשבון שלי","accountWelcome":"ברוך הבא","yourOrders":"ההזמנות שלך","noOrders":"אין עדיין הזמנות","orderDate":"תאריך","orderStatus":"סטטוס","orderTotal":"סה\"כ","viewOrder":"צפה בהזמנה","statusPending":"ממתין לתשלום","statusPaid":"שולם","statusProcessing":"בטיפול","statusShipped":"נשלח","statusDelivered":"נמסר","statusCancelled":"בוטל","notLoggedIn":"לא מחובר","pleaseLogin":"יש להתחבר כדי לצפות בחשבון","personalDetails":"פרטים אישיים","editProfile":"עריכת פרופיל","name":"שם","saveChanges":"שמור שינויים","cancel":"ביטול","addresses":"כתובות","addAddress":"הוסף כתובת","editAddress":"ערוך כתובת","deleteAddress":"מחק כתובת","setAsDefault":"הגדר כברירת מחדל","defaultAddress":"כתובת ברירת מחדל","addressLabel":"שם הכתובת","work":"עבודה","other":"אחר","noAddresses":"אין כתובות שמורות","confirmDelete":"האם אתה בטוח שברצונך למחוק?","profileUpdated":"הפרופיל עודכן בהצלחה","addressSaved":"הכתובת נשמרה בהצלחה","addressDeleted":"הכתובת נמחקה","saving":"שומר...","selectVariant":"בחר אפשרות","variantUnavailable":"לא זמין","color":"צבע","size":"מידה","material":"חומר","style":"סגנון","weight":"משקל","capacity":"קיבולת","length":"אורך","inquiryAbout":"פנייה בנושא","sendInquiry":"שלח פנייה","callNow":"התקשר עכשיו","specifications":"מפרט טכני","businessPhone":"[business_phone]","businessEmail":"[business_email]"};
   
   try {
-    // Only fetch featured products - no fallback
-    const res = await fetch(buildApiUrl('/api/ecommerce/storefront/products?websiteId=' + websiteId + '&featured=true&limit=6'));
+    // Only fetch featured products - no fallback, with language support
+    const res = await fetch(buildApiUrlWithLang('/api/ecommerce/storefront/products?websiteId=' + websiteId + '&featured=true&limit=6'));
     const data = await res.json();
     if (!data.success || !data.data?.length) {
       // Show a friendly message when no featured products
@@ -2800,7 +3379,7 @@ async function loadFeaturedCategories() {
   if (!websiteId) return;
   
   try {
-    const res = await fetch(buildApiUrl('/api/ecommerce/storefront/featured-categories?websiteId=' + websiteId));
+    const res = await fetch(buildApiUrlWithLang('/api/ecommerce/storefront/featured-categories?websiteId=' + websiteId));
     const data = await res.json();
     if (!data.success || !data.data?.length) {
       // Remove the entire section if no featured categories
@@ -2830,12 +3409,28 @@ async function loadFeaturedCategories() {
   }
 }
 
+// Helper to get localized e-commerce UI text
+// Tries zappyI18n first for multilingual support, falls back to static t object
+function getEcomText(key, fallback) {
+  if (typeof zappyI18n !== 'undefined' && typeof zappyI18n.t === 'function') {
+    var translated = zappyI18n.t('ecom_' + key);
+    // If translation exists and is not just the key, use it
+    if (translated && translated !== 'ecom_' + key) {
+      return translated;
+    }
+  }
+  return fallback;
+}
+
 function renderProductGrid(grid, products, t, isFeaturedSection) {
   // Update grid class based on layout (only for product grids, not featured section which has its own styling)
   var layout = additionalJsProductLayout || 'standard';
   if (!isFeaturedSection) {
     grid.className = 'product-grid layout-' + layout;
   }
+  
+  // Get localized text for UI elements
+  var localizedAddToCart = getEcomText('addToCart', t.addToCart);
   
   grid.innerHTML = products.map(p => {
     const hasSalePrice = p.sale_price && parseFloat(p.sale_price) < parseFloat(p.price);
@@ -2889,7 +3484,7 @@ function renderProductGrid(grid, products, t, isFeaturedSection) {
           '<p>' + (p.description || '').substring(0, 150) + (p.description?.length > 150 ? '...' : '') + '</p>' +
           '<div class="price">' + displayPrice + '</div>' +
         '</a>' +
-        '<button class="add-to-cart" onclick="event.stopPropagation(); window.zappyHandleAddToCart(' + JSON.stringify(p).replace(/"/g, '&quot;') + ')">' + t.addToCart + '</button>';
+        '<button class="add-to-cart" onclick="event.stopPropagation(); window.zappyHandleAddToCart(' + JSON.stringify(p).replace(/"/g, '&quot;') + ')">' + localizedAddToCart + '</button>';
     } else {
       // Standard (default): image, name, short description, price
       cardContent = tagsHtml +
@@ -2914,7 +3509,7 @@ async function loadCatalogCategories() {
   if (!websiteId) return;
   
   try {
-    const res = await fetch(buildApiUrl('/api/ecommerce/storefront/categories?websiteId=' + websiteId));
+    const res = await fetch(buildApiUrlWithLang('/api/ecommerce/storefront/categories?websiteId=' + websiteId));
     const data = await res.json();
     if (!data.success || !data.data?.length) return;
     
@@ -2944,13 +3539,163 @@ async function loadCatalogCategories() {
   }
 }
 
+// Initialize mobile menu toggle for e-commerce pages
+// This ensures hamburger menu works on products/cart/checkout pages
+function initEcommerceMobileMenu() {
+  const mobileToggle = document.querySelector('.mobile-toggle, #mobileToggle');
+  const navMenu = document.querySelector('#navMenu, .nav-menu');
+  
+  if (!mobileToggle || !navMenu) {
+    console.log('[E-COMMERCE] Mobile toggle or menu not found');
+    return;
+  }
+  
+  // Check if already initialized (has our custom attribute)
+  if (mobileToggle.hasAttribute('data-ecommerce-init')) {
+    return;
+  }
+  mobileToggle.setAttribute('data-ecommerce-init', 'true');
+  
+  console.log('[E-COMMERCE] Initializing mobile menu for e-commerce page');
+  
+  mobileToggle.addEventListener('click', function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    const hamburgerIcon = this.querySelector('.hamburger-icon');
+    const closeIcon = this.querySelector('.close-icon');
+    const isActive = navMenu.classList.contains('active');
+    
+    if (isActive) {
+      // Close menu
+      navMenu.classList.remove('active');
+      navMenu.style.display = '';
+      if (hamburgerIcon) hamburgerIcon.style.setProperty('display', 'block', 'important');
+      if (closeIcon) closeIcon.style.setProperty('display', 'none', 'important');
+      document.body.style.overflow = '';
+      console.log('[E-COMMERCE] Menu closed');
+    } else {
+      // Open menu
+      navMenu.classList.add('active');
+      navMenu.style.display = 'block';
+      if (hamburgerIcon) hamburgerIcon.style.setProperty('display', 'none', 'important');
+      if (closeIcon) closeIcon.style.setProperty('display', 'block', 'important');
+      document.body.style.overflow = 'hidden';
+      console.log('[E-COMMERCE] Menu opened');
+    }
+  });
+  
+  // Close menu when clicking nav links
+  const navLinks = navMenu.querySelectorAll('a');
+  navLinks.forEach(function(link) {
+    link.addEventListener('click', function() {
+      const hamburgerIcon = mobileToggle.querySelector('.hamburger-icon');
+      const closeIcon = mobileToggle.querySelector('.close-icon');
+      
+      navMenu.classList.remove('active');
+      navMenu.style.display = '';
+      if (hamburgerIcon) hamburgerIcon.style.setProperty('display', 'block', 'important');
+      if (closeIcon) closeIcon.style.setProperty('display', 'none', 'important');
+      document.body.style.overflow = '';
+    });
+  });
+  
+  console.log('[E-COMMERCE] Mobile menu initialized successfully');
+}
+
 // Initialize featured products, categories, and product/category page details on load
 document.addEventListener('DOMContentLoaded', function() {
+  // Initialize mobile menu for e-commerce pages
+  initEcommerceMobileMenu();
+  
+  // Fetch store settings first (handles announcement bar, product layout, etc.)
+  fetchAdditionalJsSettings();
   loadFeaturedProducts();
   loadFeaturedCategories();
   loadCatalogCategories();
   loadProductDetailPage();
   loadCategoryPage();
+  
+  // Register language change callback to refresh e-commerce content
+  // This ensures translated product names, categories, etc. are displayed when switching languages
+  if (typeof zappyI18n !== 'undefined' && typeof zappyI18n.onLanguageChange === 'function') {
+    zappyI18n.onLanguageChange(function(newLang, oldLang) {
+      console.log('[E-COMMERCE] Language changed from ' + oldLang + ' to ' + newLang + ', refreshing content...');
+      
+      // Refresh all e-commerce content with the new language
+      // Each function uses buildApiUrlWithLang which will now include the new language
+      fetchAdditionalJsSettings(true);  // Force refresh announcement bar with translated messages
+      loadFeaturedProducts();           // Refresh featured products section
+      loadFeaturedCategories();         // Refresh featured categories section
+      loadCatalogCategories();          // Refresh navigation category menu
+      
+      // If we're on a product detail page, refresh it
+      var detailSection = document.getElementById('product-detail');
+      if (detailSection) {
+        loadProductDetailPage();
+      }
+      
+      // If we're on a category page, refresh it
+      var categorySection = document.getElementById('category-products');
+      if (categorySection) {
+        loadCategoryPage();
+      }
+      
+      // If we're on the products listing page, refresh it
+      var productsGrid = document.getElementById('zappy-product-grid');
+      if (productsGrid && typeof loadProducts === 'function') {
+        loadProducts();
+      }
+      
+      // Update static e-commerce UI elements that are rendered at page generation time
+      // These need to be manually updated when language changes
+      updateStaticEcommerceUI();
+    });
+    console.log('[E-COMMERCE] Registered language change callback for content refresh');
+  }
+  
+  // Update static e-commerce UI elements with translated text
+  function updateStaticEcommerceUI() {
+    // Update "Add to Cart" button on product detail page
+    var addToCartBtn = document.getElementById('add-to-cart-btn');
+    if (addToCartBtn) {
+      addToCartBtn.textContent = getEcomText('addToCart', 'Add to Cart');
+    }
+    
+    // Update all other "Add to Cart" buttons in product grids
+    document.querySelectorAll('button.add-to-cart:not(#add-to-cart-btn)').forEach(function(btn) {
+      // Only update text content, preserve onclick handler
+      btn.textContent = getEcomText('addToCart', 'Add to Cart');
+    });
+    
+    // Update filter buttons text (All, Featured, New, Sale)
+    document.querySelectorAll('.filter-btn').forEach(function(btn) {
+      var category = btn.getAttribute('data-category');
+      if (category === 'all') {
+        btn.textContent = getEcomText('all', 'All');
+      } else if (category === 'featured') {
+        btn.textContent = getEcomText('featured', 'Featured');
+      } else if (category === 'new') {
+        btn.textContent = getEcomText('new', 'New');
+      } else if (category === 'sale') {
+        btn.textContent = getEcomText('sale', 'Sale');
+      }
+    });
+    
+    // Update cart drawer empty message
+    var emptyCartMsg = document.querySelector('.empty-cart p');
+    if (emptyCartMsg) {
+      emptyCartMsg.textContent = getEcomText('emptyCart', 'Your cart is empty');
+    }
+    
+    // Update checkout button text
+    var checkoutBtn = document.querySelector('.checkout-btn, #checkout-btn');
+    if (checkoutBtn) {
+      checkoutBtn.textContent = getEcomText('proceedToCheckout', 'Proceed to Checkout');
+    }
+    
+    console.log('[E-COMMERCE] Static UI elements updated for language change');
+  }
 });
 
 // Load product detail page
@@ -2961,7 +3706,7 @@ async function loadProductDetailPage() {
   const websiteId = window.ZAPPY_WEBSITE_ID;
   if (!websiteId) return;
   
-  const t = {"products":"מוצרים","ourProducts":"המוצרים שלנו","featuredProducts":"מוצרים מומלצים","noFeaturedProducts":"עוד לא נבחרו מוצרים מומלצים. צפו בכל המוצרים שלנו!","featuredCategories":"קנו לפי קטגוריה","all":"הכל","featured":"מומלצים","new":"חדשים","sale":"מבצעים","loadingProducts":"טוען מוצרים...","cart":"עגלת קניות","yourCart":"עגלת הקניות שלך","emptyCart":"העגלה ריקה","total":"סה\"כ","proceedToCheckout":"המשך לתשלום","checkout":"תשלום","customerInfo":"פרטי לקוח","fullName":"שם מלא","email":"אימייל","phone":"טלפון","shippingAddress":"כתובת למשלוח","street":"רחוב ומספר","apartment":"דירה, קומה, כניסה","city":"עיר","zip":"מיקוד","shippingMethod":"שיטת משלוח","loadingShipping":"טוען שיטות משלוח...","payment":"תשלום","loadingPayment":"טוען אפשרויות תשלום...","orderSummary":"סיכום הזמנה","subtotal":"סכום ביניים","vat":"מע\"מ","vatIncluded":"כולל מע\"מ","shipping":"משלוח","discount":"הנחה","totalToPay":"סה\"כ לתשלום","placeOrder":"בצע הזמנה","login":"התחברות","customerLogin":"התחברות לקוחות","enterEmail":"הזן את כתובת האימייל שלך ונשלח לך קוד התחברות","emailAddress":"כתובת אימייל","sendCode":"שלח קוד","enterCode":"הזן את הקוד שנשלח לאימייל שלך","verificationCode":"קוד אימות","verify":"אמת","returnPolicy":"מדיניות החזרות","addToCart":"הוסף לעגלה","addedToCart":"המוצר נוסף לעגלה!","remove":"הסר","noProducts":"אין מוצרים להצגה כרגע","errorLoading":"שגיאה בטעינה","days":"ימים","currency":"₪","free":"חינם","freeAbove":"משלוח חינם מעל","noShippingMethods":"אין אפשרויות משלוח זמינות","viewAllResults":"הצג את כל התוצאות","searchProducts":"חיפוש מוצרים","productDetails":"פרטי המוצר","viewDetails":"לפרטים נוספים","inStock":"במלאי","outOfStock":"אזל מהמלאי","sku":"מק\"ט","category":"קטגוריה","relatedProducts":"מוצרים דומים","productNotFound":"המוצר לא נמצא","backToProducts":"חזרה למוצרים","quantity":"כמות","couponCode":"קוד קופון","enterCouponCode":"הזן קוד קופון","applyCoupon":"החל","removeCoupon":"הסר","couponApplied":"הקופון הוחל בהצלחה!","invalidCoupon":"קוד קופון לא תקין","couponExpired":"הקופון פג תוקף","couponMinOrder":"סכום הזמנה מינימלי","alreadyHaveAccount":"כבר יש לך חשבון?","loginHere":"התחבר כאן","loggedInAs":"מחובר כ:","logout":"התנתק","haveCouponCode":"יש לי קוד קופון","orderSuccess":"ההזמנה התקבלה!","thankYouOrder":"תודה על ההזמנה","orderNumber":"מספר הזמנה","orderConfirmation":"אישור הזמנה נשלח לאימייל שלך","orderProcessing":"ההזמנה שלך בטיפול. נעדכן אותך כשהמשלוח יצא לדרך.","continueShopping":"להמשך קניות","orderDetails":"פרטי ההזמנה","loadingOrder":"טוען פרטי הזמנה...","orderNotFound":"לא נמצאה הזמנה","orderItems":"פריטים בהזמנה","paidAmount":"סכום ששולם","myAccount":"החשבון שלי","accountWelcome":"ברוך הבא","yourOrders":"ההזמנות שלך","noOrders":"אין עדיין הזמנות","orderDate":"תאריך","orderStatus":"סטטוס","orderTotal":"סה\"כ","viewOrder":"צפה בהזמנה","statusPending":"ממתין לתשלום","statusPaid":"שולם","statusProcessing":"בטיפול","statusShipped":"נשלח","statusDelivered":"נמסר","statusCancelled":"בוטל","notLoggedIn":"לא מחובר","pleaseLogin":"יש להתחבר כדי לצפות בחשבון","personalDetails":"פרטים אישיים","editProfile":"עריכת פרופיל","name":"שם","saveChanges":"שמור שינויים","cancel":"ביטול","addresses":"כתובות","addAddress":"הוסף כתובת","editAddress":"ערוך כתובת","deleteAddress":"מחק כתובת","setAsDefault":"הגדר כברירת מחדל","defaultAddress":"כתובת ברירת מחדל","addressLabel":"שם הכתובת","home":"בית","work":"עבודה","other":"אחר","noAddresses":"אין כתובות שמורות","confirmDelete":"האם אתה בטוח שברצונך למחוק?","profileUpdated":"הפרופיל עודכן בהצלחה","addressSaved":"הכתובת נשמרה בהצלחה","addressDeleted":"הכתובת נמחקה","saving":"שומר...","selectVariant":"בחר אפשרות","variantUnavailable":"לא זמין","color":"צבע","size":"מידה","material":"חומר","style":"סגנון","weight":"משקל","capacity":"קיבולת","length":"אורך","inquiryAbout":"פנייה בנושא","sendInquiry":"שלח פנייה","callNow":"התקשר עכשיו","specifications":"מפרט טכני","businessPhone":"[business_phone]","businessEmail":"[business_email]"};
+  const t = {"products":"מוצרים","ourProducts":"המוצרים שלנו","featuredProducts":"מוצרים מומלצים","noFeaturedProducts":"עוד לא נבחרו מוצרים מומלצים. צפו בכל המוצרים שלנו!","featuredCategories":"קנו לפי קטגוריה","all":"הכל","featured":"מומלצים","new":"חדשים","sale":"מבצעים","loadingProducts":"טוען מוצרים...","cart":"עגלת קניות","yourCart":"עגלת הקניות שלך","emptyCart":"העגלה ריקה","total":"סה\"כ","proceedToCheckout":"המשך לתשלום","checkout":"תשלום","customerInfo":"פרטי לקוח","fullName":"שם מלא","email":"אימייל","phone":"טלפון","shippingAddress":"כתובת למשלוח","street":"רחוב ומספר","apartment":"דירה, קומה, כניסה","city":"עיר","zip":"מיקוד","shippingMethod":"שיטת משלוח","loadingShipping":"טוען שיטות משלוח...","payment":"תשלום","loadingPayment":"טוען אפשרויות תשלום...","orderSummary":"סיכום הזמנה","subtotal":"סכום ביניים","vat":"מע\"מ","vatIncluded":"כולל מע\"מ","shipping":"משלוח","discount":"הנחה","totalToPay":"סה\"כ לתשלום","placeOrder":"בצע הזמנה","login":"התחברות","customerLogin":"התחברות לקוחות","enterEmail":"הזן את כתובת האימייל שלך ונשלח לך קוד התחברות","emailAddress":"כתובת אימייל","sendCode":"שלח קוד","enterCode":"הזן את הקוד שנשלח לאימייל שלך","verificationCode":"קוד אימות","verify":"אמת","returnPolicy":"מדיניות החזרות","addToCart":"הוסף לעגלה","addedToCart":"המוצר נוסף לעגלה!","remove":"הסר","noProducts":"אין מוצרים להצגה כרגע","errorLoading":"שגיאה בטעינה","days":"ימים","currency":"₪","free":"חינם","freeAbove":"משלוח חינם מעל","noShippingMethods":"אין אפשרויות משלוח זמינות","viewAllResults":"הצג את כל התוצאות","searchProducts":"חיפוש מוצרים","productDetails":"פרטי המוצר","viewDetails":"לפרטים נוספים","inStock":"במלאי","outOfStock":"אזל מהמלאי","sku":"מק\"ט","category":"קטגוריה","relatedProducts":"מוצרים דומים","productNotFound":"המוצר לא נמצא","backToProducts":"חזרה למוצרים","home":"בית","quantity":"כמות","couponCode":"קוד קופון","enterCouponCode":"הזן קוד קופון","applyCoupon":"החל","removeCoupon":"הסר","couponApplied":"הקופון הוחל בהצלחה!","invalidCoupon":"קוד קופון לא תקין","couponExpired":"הקופון פג תוקף","couponMinOrder":"סכום הזמנה מינימלי","alreadyHaveAccount":"כבר יש לך חשבון?","loginHere":"התחבר כאן","loggedInAs":"מחובר כ:","logout":"התנתק","haveCouponCode":"יש לי קוד קופון","orderSuccess":"ההזמנה התקבלה!","thankYouOrder":"תודה על ההזמנה","orderNumber":"מספר הזמנה","orderConfirmation":"אישור הזמנה נשלח לאימייל שלך","orderProcessing":"ההזמנה שלך בטיפול. נעדכן אותך כשהמשלוח יצא לדרך.","continueShopping":"להמשך קניות","orderDetails":"פרטי ההזמנה","loadingOrder":"טוען פרטי הזמנה...","orderNotFound":"לא נמצאה הזמנה","orderItems":"פריטים בהזמנה","paidAmount":"סכום ששולם","myAccount":"החשבון שלי","accountWelcome":"ברוך הבא","yourOrders":"ההזמנות שלך","noOrders":"אין עדיין הזמנות","orderDate":"תאריך","orderStatus":"סטטוס","orderTotal":"סה\"כ","viewOrder":"צפה בהזמנה","statusPending":"ממתין לתשלום","statusPaid":"שולם","statusProcessing":"בטיפול","statusShipped":"נשלח","statusDelivered":"נמסר","statusCancelled":"בוטל","notLoggedIn":"לא מחובר","pleaseLogin":"יש להתחבר כדי לצפות בחשבון","personalDetails":"פרטים אישיים","editProfile":"עריכת פרופיל","name":"שם","saveChanges":"שמור שינויים","cancel":"ביטול","addresses":"כתובות","addAddress":"הוסף כתובת","editAddress":"ערוך כתובת","deleteAddress":"מחק כתובת","setAsDefault":"הגדר כברירת מחדל","defaultAddress":"כתובת ברירת מחדל","addressLabel":"שם הכתובת","work":"עבודה","other":"אחר","noAddresses":"אין כתובות שמורות","confirmDelete":"האם אתה בטוח שברצונך למחוק?","profileUpdated":"הפרופיל עודכן בהצלחה","addressSaved":"הכתובת נשמרה בהצלחה","addressDeleted":"הכתובת נמחקה","saving":"שומר...","selectVariant":"בחר אפשרות","variantUnavailable":"לא זמין","color":"צבע","size":"מידה","material":"חומר","style":"סגנון","weight":"משקל","capacity":"קיבולת","length":"אורך","inquiryAbout":"פנייה בנושא","sendInquiry":"שלח פנייה","callNow":"התקשר עכשיו","specifications":"מפרט טכני","businessPhone":"[business_phone]","businessEmail":"[business_email]"};
   
   // Get slug from URL - check both pathname and query parameter (preview mode)
   let pagePath = window.location.pathname;
@@ -2983,7 +3728,7 @@ async function loadProductDetailPage() {
   console.log('Loading product with slug:', slug);
   
   try {
-    const res = await fetch(buildApiUrl('/api/ecommerce/storefront/products/' + encodeURIComponent(slug) + '?websiteId=' + websiteId));
+    const res = await fetch(buildApiUrlWithLang('/api/ecommerce/storefront/products/' + encodeURIComponent(slug) + '?websiteId=' + websiteId));
     const data = await res.json();
     
     if (!data.success || !data.data) {
@@ -3014,7 +3759,7 @@ async function loadCategoryPage() {
   const websiteId = window.ZAPPY_WEBSITE_ID;
   if (!websiteId) return;
   
-  const t = {"products":"מוצרים","ourProducts":"המוצרים שלנו","featuredProducts":"מוצרים מומלצים","noFeaturedProducts":"עוד לא נבחרו מוצרים מומלצים. צפו בכל המוצרים שלנו!","featuredCategories":"קנו לפי קטגוריה","all":"הכל","featured":"מומלצים","new":"חדשים","sale":"מבצעים","loadingProducts":"טוען מוצרים...","cart":"עגלת קניות","yourCart":"עגלת הקניות שלך","emptyCart":"העגלה ריקה","total":"סה\"כ","proceedToCheckout":"המשך לתשלום","checkout":"תשלום","customerInfo":"פרטי לקוח","fullName":"שם מלא","email":"אימייל","phone":"טלפון","shippingAddress":"כתובת למשלוח","street":"רחוב ומספר","apartment":"דירה, קומה, כניסה","city":"עיר","zip":"מיקוד","shippingMethod":"שיטת משלוח","loadingShipping":"טוען שיטות משלוח...","payment":"תשלום","loadingPayment":"טוען אפשרויות תשלום...","orderSummary":"סיכום הזמנה","subtotal":"סכום ביניים","vat":"מע\"מ","vatIncluded":"כולל מע\"מ","shipping":"משלוח","discount":"הנחה","totalToPay":"סה\"כ לתשלום","placeOrder":"בצע הזמנה","login":"התחברות","customerLogin":"התחברות לקוחות","enterEmail":"הזן את כתובת האימייל שלך ונשלח לך קוד התחברות","emailAddress":"כתובת אימייל","sendCode":"שלח קוד","enterCode":"הזן את הקוד שנשלח לאימייל שלך","verificationCode":"קוד אימות","verify":"אמת","returnPolicy":"מדיניות החזרות","addToCart":"הוסף לעגלה","addedToCart":"המוצר נוסף לעגלה!","remove":"הסר","noProducts":"אין מוצרים להצגה כרגע","errorLoading":"שגיאה בטעינה","days":"ימים","currency":"₪","free":"חינם","freeAbove":"משלוח חינם מעל","noShippingMethods":"אין אפשרויות משלוח זמינות","viewAllResults":"הצג את כל התוצאות","searchProducts":"חיפוש מוצרים","productDetails":"פרטי המוצר","viewDetails":"לפרטים נוספים","inStock":"במלאי","outOfStock":"אזל מהמלאי","sku":"מק\"ט","category":"קטגוריה","relatedProducts":"מוצרים דומים","productNotFound":"המוצר לא נמצא","backToProducts":"חזרה למוצרים","quantity":"כמות","couponCode":"קוד קופון","enterCouponCode":"הזן קוד קופון","applyCoupon":"החל","removeCoupon":"הסר","couponApplied":"הקופון הוחל בהצלחה!","invalidCoupon":"קוד קופון לא תקין","couponExpired":"הקופון פג תוקף","couponMinOrder":"סכום הזמנה מינימלי","alreadyHaveAccount":"כבר יש לך חשבון?","loginHere":"התחבר כאן","loggedInAs":"מחובר כ:","logout":"התנתק","haveCouponCode":"יש לי קוד קופון","orderSuccess":"ההזמנה התקבלה!","thankYouOrder":"תודה על ההזמנה","orderNumber":"מספר הזמנה","orderConfirmation":"אישור הזמנה נשלח לאימייל שלך","orderProcessing":"ההזמנה שלך בטיפול. נעדכן אותך כשהמשלוח יצא לדרך.","continueShopping":"להמשך קניות","orderDetails":"פרטי ההזמנה","loadingOrder":"טוען פרטי הזמנה...","orderNotFound":"לא נמצאה הזמנה","orderItems":"פריטים בהזמנה","paidAmount":"סכום ששולם","myAccount":"החשבון שלי","accountWelcome":"ברוך הבא","yourOrders":"ההזמנות שלך","noOrders":"אין עדיין הזמנות","orderDate":"תאריך","orderStatus":"סטטוס","orderTotal":"סה\"כ","viewOrder":"צפה בהזמנה","statusPending":"ממתין לתשלום","statusPaid":"שולם","statusProcessing":"בטיפול","statusShipped":"נשלח","statusDelivered":"נמסר","statusCancelled":"בוטל","notLoggedIn":"לא מחובר","pleaseLogin":"יש להתחבר כדי לצפות בחשבון","personalDetails":"פרטים אישיים","editProfile":"עריכת פרופיל","name":"שם","saveChanges":"שמור שינויים","cancel":"ביטול","addresses":"כתובות","addAddress":"הוסף כתובת","editAddress":"ערוך כתובת","deleteAddress":"מחק כתובת","setAsDefault":"הגדר כברירת מחדל","defaultAddress":"כתובת ברירת מחדל","addressLabel":"שם הכתובת","home":"בית","work":"עבודה","other":"אחר","noAddresses":"אין כתובות שמורות","confirmDelete":"האם אתה בטוח שברצונך למחוק?","profileUpdated":"הפרופיל עודכן בהצלחה","addressSaved":"הכתובת נשמרה בהצלחה","addressDeleted":"הכתובת נמחקה","saving":"שומר...","selectVariant":"בחר אפשרות","variantUnavailable":"לא זמין","color":"צבע","size":"מידה","material":"חומר","style":"סגנון","weight":"משקל","capacity":"קיבולת","length":"אורך","inquiryAbout":"פנייה בנושא","sendInquiry":"שלח פנייה","callNow":"התקשר עכשיו","specifications":"מפרט טכני","businessPhone":"[business_phone]","businessEmail":"[business_email]"};
+  const t = {"products":"מוצרים","ourProducts":"המוצרים שלנו","featuredProducts":"מוצרים מומלצים","noFeaturedProducts":"עוד לא נבחרו מוצרים מומלצים. צפו בכל המוצרים שלנו!","featuredCategories":"קנו לפי קטגוריה","all":"הכל","featured":"מומלצים","new":"חדשים","sale":"מבצעים","loadingProducts":"טוען מוצרים...","cart":"עגלת קניות","yourCart":"עגלת הקניות שלך","emptyCart":"העגלה ריקה","total":"סה\"כ","proceedToCheckout":"המשך לתשלום","checkout":"תשלום","customerInfo":"פרטי לקוח","fullName":"שם מלא","email":"אימייל","phone":"טלפון","shippingAddress":"כתובת למשלוח","street":"רחוב ומספר","apartment":"דירה, קומה, כניסה","city":"עיר","zip":"מיקוד","shippingMethod":"שיטת משלוח","loadingShipping":"טוען שיטות משלוח...","payment":"תשלום","loadingPayment":"טוען אפשרויות תשלום...","orderSummary":"סיכום הזמנה","subtotal":"סכום ביניים","vat":"מע\"מ","vatIncluded":"כולל מע\"מ","shipping":"משלוח","discount":"הנחה","totalToPay":"סה\"כ לתשלום","placeOrder":"בצע הזמנה","login":"התחברות","customerLogin":"התחברות לקוחות","enterEmail":"הזן את כתובת האימייל שלך ונשלח לך קוד התחברות","emailAddress":"כתובת אימייל","sendCode":"שלח קוד","enterCode":"הזן את הקוד שנשלח לאימייל שלך","verificationCode":"קוד אימות","verify":"אמת","returnPolicy":"מדיניות החזרות","addToCart":"הוסף לעגלה","addedToCart":"המוצר נוסף לעגלה!","remove":"הסר","noProducts":"אין מוצרים להצגה כרגע","errorLoading":"שגיאה בטעינה","days":"ימים","currency":"₪","free":"חינם","freeAbove":"משלוח חינם מעל","noShippingMethods":"אין אפשרויות משלוח זמינות","viewAllResults":"הצג את כל התוצאות","searchProducts":"חיפוש מוצרים","productDetails":"פרטי המוצר","viewDetails":"לפרטים נוספים","inStock":"במלאי","outOfStock":"אזל מהמלאי","sku":"מק\"ט","category":"קטגוריה","relatedProducts":"מוצרים דומים","productNotFound":"המוצר לא נמצא","backToProducts":"חזרה למוצרים","home":"בית","quantity":"כמות","couponCode":"קוד קופון","enterCouponCode":"הזן קוד קופון","applyCoupon":"החל","removeCoupon":"הסר","couponApplied":"הקופון הוחל בהצלחה!","invalidCoupon":"קוד קופון לא תקין","couponExpired":"הקופון פג תוקף","couponMinOrder":"סכום הזמנה מינימלי","alreadyHaveAccount":"כבר יש לך חשבון?","loginHere":"התחבר כאן","loggedInAs":"מחובר כ:","logout":"התנתק","haveCouponCode":"יש לי קוד קופון","orderSuccess":"ההזמנה התקבלה!","thankYouOrder":"תודה על ההזמנה","orderNumber":"מספר הזמנה","orderConfirmation":"אישור הזמנה נשלח לאימייל שלך","orderProcessing":"ההזמנה שלך בטיפול. נעדכן אותך כשהמשלוח יצא לדרך.","continueShopping":"להמשך קניות","orderDetails":"פרטי ההזמנה","loadingOrder":"טוען פרטי הזמנה...","orderNotFound":"לא נמצאה הזמנה","orderItems":"פריטים בהזמנה","paidAmount":"סכום ששולם","myAccount":"החשבון שלי","accountWelcome":"ברוך הבא","yourOrders":"ההזמנות שלך","noOrders":"אין עדיין הזמנות","orderDate":"תאריך","orderStatus":"סטטוס","orderTotal":"סה\"כ","viewOrder":"צפה בהזמנה","statusPending":"ממתין לתשלום","statusPaid":"שולם","statusProcessing":"בטיפול","statusShipped":"נשלח","statusDelivered":"נמסר","statusCancelled":"בוטל","notLoggedIn":"לא מחובר","pleaseLogin":"יש להתחבר כדי לצפות בחשבון","personalDetails":"פרטים אישיים","editProfile":"עריכת פרופיל","name":"שם","saveChanges":"שמור שינויים","cancel":"ביטול","addresses":"כתובות","addAddress":"הוסף כתובת","editAddress":"ערוך כתובת","deleteAddress":"מחק כתובת","setAsDefault":"הגדר כברירת מחדל","defaultAddress":"כתובת ברירת מחדל","addressLabel":"שם הכתובת","work":"עבודה","other":"אחר","noAddresses":"אין כתובות שמורות","confirmDelete":"האם אתה בטוח שברצונך למחוק?","profileUpdated":"הפרופיל עודכן בהצלחה","addressSaved":"הכתובת נשמרה בהצלחה","addressDeleted":"הכתובת נמחקה","saving":"שומר...","selectVariant":"בחר אפשרות","variantUnavailable":"לא זמין","color":"צבע","size":"מידה","material":"חומר","style":"סגנון","weight":"משקל","capacity":"קיבולת","length":"אורך","inquiryAbout":"פנייה בנושא","sendInquiry":"שלח פנייה","callNow":"התקשר עכשיו","specifications":"מפרט טכני","businessPhone":"[business_phone]","businessEmail":"[business_email]"};
   
   // Get slug from URL - check both pathname and query parameter (preview mode)
   let pagePath = window.location.pathname;
@@ -3036,7 +3781,7 @@ async function loadCategoryPage() {
   console.log('Loading category with slug:', slug);
   
   try {
-    const res = await fetch(buildApiUrl('/api/ecommerce/storefront/categories/' + encodeURIComponent(slug) + '?websiteId=' + websiteId));
+    const res = await fetch(buildApiUrlWithLang('/api/ecommerce/storefront/categories/' + encodeURIComponent(slug) + '?websiteId=' + websiteId));
     const data = await res.json();
     
     if (!data.success || !data.data) {
@@ -3212,11 +3957,25 @@ function renderProductDetail(container, product, t) {
     variantSelectorHtml = '<div class="product-variants" id="product-variants">' + groupsHtml + '</div>';
   }
   
+  // Build breadcrumb
+  var breadcrumbHtml = '<nav class="product-breadcrumb">';
+  breadcrumbHtml += '<a href="/">' + t.home + '</a>';
+  breadcrumbHtml += '<span class="breadcrumb-separator">›</span>';
+  breadcrumbHtml += '<a href="/products">' + t.products + '</a>';
+  if (product.category_name) {
+    breadcrumbHtml += '<span class="breadcrumb-separator">›</span>';
+    if (product.category_id) {
+      breadcrumbHtml += '<a href="/products?category=' + product.category_id + '">' + product.category_name + '</a>';
+    } else {
+      breadcrumbHtml += '<span class="breadcrumb-current">' + product.category_name + '</span>';
+    }
+  }
+  breadcrumbHtml += '<span class="breadcrumb-separator">›</span>';
+  breadcrumbHtml += '<span class="breadcrumb-current">' + product.name + '</span>';
+  breadcrumbHtml += '</nav>';
+  
   container.innerHTML = `
-    <a href="/products" class="back-to-products">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-      ${t.backToProducts}
-    </a>
+    ${breadcrumbHtml}
     <div class="product-detail-container">
       <div class="product-gallery">
         ${mainImage 
@@ -3233,7 +3992,6 @@ function renderProductDetail(container, product, t) {
       </div>
       <div class="product-info">
         <h1>${product.name}</h1>
-        ${product.category_name ? '<span class="product-category">' + product.category_name + '</span>' : ''}
         <div class="product-price" id="product-price-display">
           ${hasSalePrice 
             ? t.currency + product.sale_price + '<span class="original-price">' + t.currency + product.price + '</span>'
@@ -3567,8 +4325,8 @@ async function loadRelatedProducts(currentProduct, t) {
   
   const websiteId = window.ZAPPY_WEBSITE_ID;
   try {
-    // Fetch products from same category or random products
-    let url = buildApiUrl('/api/ecommerce/storefront/products?websiteId=' + websiteId + '&limit=4');
+    // Fetch products from same category or random products, with language support
+    let url = buildApiUrlWithLang('/api/ecommerce/storefront/products?websiteId=' + websiteId + '&limit=4');
     if (currentProduct.category_id) {
       url += '&categoryId=' + currentProduct.category_id;
     }
@@ -3589,355 +4347,6 @@ async function loadRelatedProducts(currentProduct, t) {
   }
 }
 /* ==ZAPPY E-COMMERCE JS END== */
-
-/* Cookie Consent */
-
-// Helper function to check cookie consent
-function hasConsentFor(category) {
-  if (typeof window.CookieConsent === 'undefined') {
-    return false; // Default to no consent if cookie consent not loaded
-  }
-  
-  return window.CookieConsent.validConsent(category);
-}
-
-// Helper function to execute code only with consent
-function withConsent(category, callback) {
-  if (hasConsentFor(category)) {
-    callback();
-  } else {
-    console.log(`[WARNING] Skipping ${category} code - no user consent`);
-  }
-}
-
-// Cookie Consent Initialization
-
-(function() {
-  'use strict';
-  
-  let initAttempts = 0;
-  const maxAttempts = 50; // 5 seconds max wait
-  
-  // Wait for DOM and vanilla-cookieconsent to be ready
-  function initCookieConsent() {
-    initAttempts++;
-    
-    
-    if (typeof window.CookieConsent === 'undefined') {
-      if (initAttempts < maxAttempts) {
-        setTimeout(initCookieConsent, 100);
-      } else {
-      }
-      return;
-    }
-
-    const cc = window.CookieConsent;
-    
-    
-    // Initialize cookie consent
-    try {
-      cc.run({
-  "autoShow": true,
-  "mode": "opt-in",
-  "revision": 0,
-  "categories": {
-    "necessary": {
-      "enabled": true,
-      "readOnly": true
-    },
-    "analytics": {
-      "enabled": false,
-      "readOnly": false,
-      "autoClear": {
-        "cookies": [
-          {
-            "name": "_ga"
-          },
-          {
-            "name": "_ga_*"
-          },
-          {
-            "name": "_gid"
-          },
-          {
-            "name": "_gat"
-          }
-        ]
-      }
-    },
-    "marketing": {
-      "enabled": false,
-      "readOnly": false,
-      "autoClear": {
-        "cookies": [
-          {
-            "name": "_fbp"
-          },
-          {
-            "name": "_fbc"
-          },
-          {
-            "name": "fr"
-          }
-        ]
-      }
-    }
-  },
-  "language": {
-    "default": "he",
-    "translations": {
-      "he": {
-        "consentModal": {
-          "title": "אנחנו משתמשים בעוגיות 🍪",
-          "description": "מיס לוסי משתמש בעוגיות כדי לשפר את החוויה שלך, לנתח שימוש באתר ולסייע במאמצי השיווק שלנו.",
-          "acceptAllBtn": "אשר הכל",
-          "acceptNecessaryBtn": "רק הכרחי",
-          "showPreferencesBtn": "נהל העדפות",
-          "footer": "<a href=\"#privacy-policy\">מדיניות פרטיות</a> | <a href=\"#terms-conditions\">תנאי שימוש</a>"
-        },
-        "preferencesModal": {
-          "title": "העדפות עוגיות",
-          "acceptAllBtn": "אשר הכל",
-          "acceptNecessaryBtn": "רק הכרחי",
-          "savePreferencesBtn": "שמור העדפות",
-          "closeIconLabel": "סגור",
-          "sections": [
-            {
-              "title": "עוגיות חיוניות",
-              "description": "עוגיות אלה הכרחיות לתפקוד האתר ולא ניתן להשבית אותן.",
-              "linkedCategory": "necessary"
-            },
-            {
-              "title": "עוגיות ניתוח",
-              "description": "עוגיות אלה עוזרות לנו להבין איך המבקרים מתקשרים עם האתר שלנו.",
-              "linkedCategory": "analytics"
-            },
-            {
-              "title": "עוגיות שיווקיות",
-              "description": "עוגיות אלה משמשות להצגת פרסומות מותאמות אישית.",
-              "linkedCategory": "marketing"
-            }
-          ]
-        }
-      }
-    }
-  },
-  "guiOptions": {
-    "consentModal": {
-      "layout": "box",
-      "position": "bottom right",
-      "equalWeightButtons": true,
-      "flipButtons": false
-    },
-    "preferencesModal": {
-      "layout": "box",
-      "equalWeightButtons": true,
-      "flipButtons": false
-    }
-  }
-});
-      
-      // Optional: Handle consent changes (check if onChange is available)
-      if (typeof cc.onChange === 'function') {
-        cc.onChange(function(cookie, changed_preferences) {
-      
-      // Enable/disable analytics based on consent
-      if (changed_preferences.includes('analytics')) {
-        if (cc.validConsent('analytics')) {
-          // Enable analytics (e.g., Google Analytics)
-          // Example: gtag('consent', 'update', { analytics_storage: 'granted' });
-        } else {
-          // Example: gtag('consent', 'update', { analytics_storage: 'denied' });
-        }
-      }
-      
-      // Enable/disable marketing based on consent
-      if (changed_preferences.includes('marketing')) {
-        if (cc.validConsent('marketing')) {
-          // Example: gtag('consent', 'update', { ad_storage: 'granted' });
-        } else {
-          // Example: gtag('consent', 'update', { ad_storage: 'denied' });
-        }
-      }
-        });
-      } else {
-      }
-
-      // Note: Cookie Preferences button removed per marketing guidelines
-      // Footer should be clean and minimal - users can manage cookies via banner
-    } catch (error) {
-    }
-  }
-
-  // Initialize when DOM is ready - multiple approaches for reliability
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initCookieConsent);
-    // Backup timeout in case DOMContentLoaded doesn't fire
-    setTimeout(initCookieConsent, 1000);
-  } else if (document.readyState === 'interactive' || document.readyState === 'complete') {
-    initCookieConsent();
-  } else {
-    // Fallback - try after a short delay
-    setTimeout(initCookieConsent, 500);
-  }
-  
-  // Additional fallback - try after page load
-  if (typeof window !== 'undefined') {
-    if (window.addEventListener) {
-      window.addEventListener('load', initCookieConsent, { once: true });
-    }
-  }
-})();
-
-/* Accessibility Features */
-
-/* Mickidum Accessibility Toolbar Initialization - Zappy Style */
-
-window.onload = function() {
-    
-    try {
-        window.micAccessTool = new MicAccessTool({
-            buttonPosition: 'left', // Position on left side
-            forceLang: 'he-IL', // Force language
-            icon: {
-                position: {
-                    bottom: { size: 50, units: 'px' },
-                    left: { size: 20, units: 'px' },
-                    type: 'fixed'
-                },
-                backgroundColor: 'transparent', // Transparent to allow CSS styling
-                color: 'transparent', // Let CSS handle coloring
-                img: 'accessible',
-                circular: false // Square button for consistent styling
-            },
-            menu: {
-                dimensions: {
-                    width: { size: 300, units: 'px' },
-                    height: { size: 'auto', units: 'px' }
-                }
-            }
-        });
-        
-    } catch (error) {
-    }
-    
-    // Keyboard shortcut handler: ALT+A (Option+A on Mac) to toggle accessibility widget visibility (desktop only)
-    document.addEventListener('keydown', function(event) {
-        // Check if ALT+A is pressed (ALT on Windows/Linux, Option on Mac)
-        var isAltOrOption = event.altKey;
-        // Use event.code for reliable physical key detection (works regardless of Option key character output)
-        var isAKey = event.code === 'KeyA' || event.keyCode === 65 || event.which === 65 || 
-                      (event.key && (event.key.toLowerCase() === 'a' || event.key === 'å' || event.key === 'Å'));
-        
-        if (isAltOrOption && isAKey) {
-            // Only work on desktop (screen width > 768px)
-            if (window.innerWidth > 768) {
-                event.preventDefault();
-                event.stopPropagation();
-                
-                // Toggle visibility class on body
-                var isVisible = document.body.classList.contains('accessibility-widget-visible');
-                
-                if (isVisible) {
-                    // Hide the widget
-                    document.body.classList.remove('accessibility-widget-visible');
-                } else {
-                    // Show the widget
-                    document.body.classList.add('accessibility-widget-visible');
-                    
-                    // After a short delay, click the button to open the menu
-                    setTimeout(function() {
-                        var accessButton = document.getElementById('mic-access-tool-general-button');
-                        if (accessButton) {
-                            accessButton.click();
-                        }
-                    }, 200);
-                }
-            }
-        }
-    }, true);
-};
-
-
-// Zappy Contact Form API Integration (Fallback)
-(function() {
-    if (window.zappyContactFormLoaded) {
-        console.log('📧 Zappy contact form already loaded');
-        return;
-    }
-    window.zappyContactFormLoaded = true;
-
-    function initContactFormIntegration() {
-        console.log('📧 Zappy: Initializing contact form API integration...');
-
-        // Find the contact form (try multiple selectors for flexibility)
-        const contactForm = document.querySelector('.contact-form') || 
-                           document.querySelector('form[action*="contact"]') ||
-                           document.querySelector('form#contact') ||
-                           document.querySelector('form#contactForm') ||
-                           document.getElementById('contactForm') ||
-                           document.querySelector('section.contact form') ||
-                           document.querySelector('section#contact form') ||
-                           document.querySelector('form');
-        
-        if (!contactForm) {
-            console.log('⚠️ Zappy: No contact form found on page');
-            return;
-        }
-        
-        console.log('✅ Zappy: Contact form found:', contactForm.className || contactForm.id || 'unnamed form');
-
-        // Store original submit handler if exists
-        const originalOnSubmit = contactForm.onsubmit;
-
-    // Add Zappy API integration using capture phase to run before other handlers
-    contactForm.addEventListener('submit', async function(e) {
-        // Get form data
-        const formData = new FormData(this);
-        const data = Object.fromEntries(formData);
-
-        // Send to Zappy backend API (don't prevent default, let other handlers run)
-        try {
-            console.log('📧 Zappy: Sending contact form to backend API...');
-            const response = await fetch('http://localhost:5001/api/email/contact-form', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    websiteId: '6a84bc7a-3c3e-4866-bea4-1a5bb409df81',
-                    name: data.name || '',
-                    email: data.email || '',
-                    subject: data.subject || 'Contact Form Submission',
-                    message: data.message || '',
-                    phone: data.phone || null
-                })
-            });
-
-            const result = await response.json();
-            
-            if (result.success) {
-                console.log('✅ Zappy: Contact form data sent successfully to backend');
-            } else {
-                console.log('⚠️ Zappy: Backend returned error:', result.error);
-            }
-        } catch (error) {
-            console.error('❌ Zappy: Failed to send to backend API:', error);
-            // Don't break the existing form submission
-        }
-        }, true); // Use capture phase to run before other handlers
-
-        console.log('✅ Zappy: Contact form API integration initialized');
-    } // End of initContactFormIntegration
-    
-    // Initialize when DOM is ready
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initContactFormIntegration);
-    } else {
-        // DOM is already ready, initialize immediately
-        initContactFormIntegration();
-    }
-})();
 
 
 /* ZAPPY_PUBLISHED_LIGHTBOX_RUNTIME */
