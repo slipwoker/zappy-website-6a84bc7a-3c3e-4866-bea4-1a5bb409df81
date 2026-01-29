@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title data-i18n="checkout_page_title">תשלום - מיס לוסי</title>
+  <title>תשלום</title>
   
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -83,8 +83,6 @@
     <script src="https://cdn.jsdelivr.net/npm/vanilla-cookieconsent@3/dist/cookieconsent.umd.js"></script>
     <!-- Mickidum Accessibility Toolbar -->
     <script src="https://cdn.jsdelivr.net/gh/mickidum/acc_toolbar/acctoolbar/acctoolbar.min.js"></script>
-
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <style>
 /* Announcement Bar Styles */
 .zappy-announcement-bar {
@@ -702,6 +700,8 @@ html[dir="rtl"] body {
 }
 
 </style>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <!-- Zappy Analytics -->
 <script>
 (function() {
@@ -948,17 +948,16 @@ html[dir="rtl"] body {
     </style>
 </head>
 <body>
-<div class="zappy-announcement-bar"><span class="zappy-announcement-message active" data-i18n="checkout_span_13">משלוח חינם מעל 200 ש״ח</span></div>
   <script>window.ZAPPY_WEBSITE_ID = "6a84bc7a-3c3e-4866-bea4-1a5bb409df81";window.ZAPPY_API_BASE = "http://localhost:5001";</script>
   
     <div class="mobile-search-panel" id="mobile-search-panel">
       <div class="search-wrapper">
-        <input type="text" id="mobile-search-input" placeholder="חיפוש מוצרים..." autocomplete="off" data-i18n-placeholder="checkout_placeholder_57">
-        <button class="search-submit" id="mobile-search-submit" title="חיפוש" data-i18n-title="checkout_title_69">
-          <svg width="20" height="20" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg>
+        <input type="text" id="mobile-search-input" placeholder="חיפוש מוצרים..." autocomplete="off">
+        <button class="search-submit" id="mobile-search-submit" title="חיפוש">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
         </button>
         <button class="close-search" id="close-mobile-search">
-          <svg width="20" height="20" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"></path></svg>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
         </button>
       </div>
       <div class="search-results" id="mobile-search-results"></div>
@@ -982,34 +981,34 @@ html[dir="rtl"] body {
   <div class="nav-container">
     <div class="nav-brand">
       <a href="/" class="logo-link">
-        <img src="/assets/business-logo.webp" alt="מיס לוסי" class="logo" data-i18n-alt="checkout_alt_67">
+        <img src="/assets/business-logo.webp" alt="מיס לוסי" class="logo" data-i18n-alt="home_alt_70">
       </a>
     </div>
     
     <ul class="nav-menu" id="navMenu">
 
     <li class="menu-item-has-children zappy-products-dropdown">
-      <a href="/products" data-i18n="checkout_nav_51">
+      <a href="/products" data-i18n="home_nav_62">
         מוצרים
         <svg class="dropdown-arrow" width="12" height="12" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M6 9l6 6 6-6"></path>
         </svg>
       </a>
       <ul class="sub-menu" id="zappy-nav-category-links">
-        <li><a href="/products" data-i18n="checkout_nav_52">כל המוצרים</a></li>
+        <li><a href="/products" data-i18n="home_nav_63">כל המוצרים</a></li>
         <!-- Categories will be loaded dynamically -->
       </ul>
     </li>
   
-      <li><a href="/menu" data-i18n="checkout_nav_53">תפריט</a></li>
-      <li><a href="/about" data-i18n="checkout_nav_54">אודות</a></li>
-    <li><a href="/contact" data-i18n="checkout_nav_55">צור קשר</a></li></ul><div class="nav-ecommerce-icons nav-icons-left"><a href="/login" class="login-link nav-login" title="התחברות" data-i18n-title="checkout_title_70"><svg class="login-icon" width="20" height="20" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></a><a href="#cart" class="cart-link nav-cart" id="cart-drawer-toggle" title="עגלת קניות" data-i18n-title="checkout_title_71"><svg class="cart-icon" width="20" height="20" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg><span class="cart-count">0</span></a><div class="nav-search-box">
-    <input type="text" class="nav-search-input" id="nav-search-input" placeholder="חיפוש מוצרים..." autocomplete="off" data-i18n-placeholder="checkout_placeholder_58">
-    <button class="nav-search-btn" id="nav-search-btn" title="חיפוש" data-i18n-title="checkout_title_72">
-      <svg class="search-icon" width="18" height="18" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg>
+      <li><a href="/menu" data-i18n="home_nav_64">תפריט</a></li>
+      <li><a href="/about" data-i18n="home_nav_65">אודות</a></li>
+    <li><a href="/contact" data-i18n="home_nav_66">צור קשר</a></li></ul><div class="nav-ecommerce-icons nav-icons-left"><a href="/login" class="login-link nav-login" title="התחברות"><svg class="login-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></a><a href="#cart" class="cart-link nav-cart" id="cart-drawer-toggle" title="עגלת קניות"><svg class="cart-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg><span class="cart-count">0</span></a><div class="nav-search-box">
+    <input type="text" class="nav-search-input" id="nav-search-input" placeholder="חיפוש מוצרים..." autocomplete="off">
+    <button class="nav-search-btn" id="nav-search-btn" title="חיפוש">
+      <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
     </button>
     <div class="nav-search-results" id="nav-search-results"></div>
-  </div></div><div class="nav-ecommerce-icons nav-icons-right"><button class="nav-search-toggle" id="mobile-search-toggle" title="חיפוש" data-i18n-title="checkout_title_73"><svg width="18" height="18" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg></button></div>
+  </div></div><div class="nav-ecommerce-icons nav-icons-right"><button class="nav-search-toggle" id="mobile-search-toggle" title="חיפוש"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg></button></div>
     
     
   </div>
@@ -1024,7 +1023,7 @@ html[dir="rtl"] body {
 </div></nav>
 <nav class="zappy-catalog-menu rtl" id="zappy-catalog-menu">
       <div class="catalog-menu-container">
-        <a href="/products" class="catalog-menu-item catalog-menu-all" data-i18n="checkout_nav_56">כל המוצרים</a>
+        <a href="/products" class="catalog-menu-item catalog-menu-all" data-i18n="home_nav_67">כל המוצרים</a>
         <div class="catalog-menu-categories" id="zappy-category-links">
           <!-- Categories will be loaded dynamically -->
         </div>
@@ -1033,75 +1032,75 @@ html[dir="rtl"] body {
   <main class="page-container ecommerce-page">
     
         <section class="checkout-section">
-          <h1 data-i18n="checkout_h1_1">תשלום</h1>
+          <h1>תשלום</h1>
           <div class="checkout-layout">
             <div class="checkout-form">
               <div class="checkout-step">
                 <div class="checkout-login-prompt" id="checkout-login-prompt">
-                  <span data-i18n="checkout_span_14">כבר יש לך חשבון?</span>
-                  <a href="/login" class="checkout-login-link" id="checkout-login-link" data-i18n="checkout_link_24">התחבר כאן</a>
+                  <span>כבר יש לך חשבון?</span>
+                  <a href="/login" class="checkout-login-link" id="checkout-login-link">התחבר כאן</a>
                 </div>
                 <div class="checkout-logged-in" id="checkout-logged-in" style="display: none;">
                   <div class="checkout-logged-in-text">
-                    <span data-i18n="checkout_span_15">מחובר כ:</span>
+                    <span>מחובר כ:</span>
                     <strong id="checkout-logged-in-name"></strong>
                     <span id="checkout-logged-in-email"></span>
                   </div>
-                  <button type="button" class="checkout-logout-btn" id="checkout-logout-btn" data-i18n="checkout_btn_37">התנתק</button>
+                  <button type="button" class="checkout-logout-btn" id="checkout-logout-btn">התנתק</button>
                 </div>
-                <h2 data-i18n="checkout_h2_2">פרטי לקוח</h2>
-                <input type="text" placeholder="שם מלא" id="customer-name" required="" data-i18n-placeholder="checkout_placeholder_59">
-                <input type="email" placeholder="אימייל" id="customer-email" required="" data-i18n-placeholder="checkout_placeholder_60">
-                <input type="tel" placeholder="טלפון" id="customer-phone" required="" data-i18n-placeholder="checkout_placeholder_61">
+                <h2>פרטי לקוח</h2>
+                <input type="text" placeholder="שם מלא" id="customer-name" required>
+                <input type="email" placeholder="אימייל" id="customer-email" required>
+                <input type="tel" placeholder="טלפון" id="customer-phone" required>
               </div>
               <div class="checkout-step">
-                <h2 data-i18n="checkout_h2_3">שיטת משלוח</h2>
+                <h2>שיטת משלוח</h2>
                 <div id="shipping-methods">טוען שיטות משלוח...</div>
               </div>
               <div class="checkout-step" id="shipping-address-section">
-                <h2 data-i18n="checkout_h2_4">כתובת למשלוח</h2>
-                <input type="text" placeholder="רחוב ומספר" id="shipping-street" required="" data-i18n-placeholder="checkout_placeholder_62">
-                <input type="text" placeholder="דירה, קומה, כניסה" id="shipping-apartment" data-i18n-placeholder="checkout_placeholder_63">
-                <input type="text" placeholder="עיר" id="shipping-city" required="" data-i18n-placeholder="checkout_placeholder_64">
-                <input type="text" placeholder="מיקוד" id="shipping-zip" data-i18n-placeholder="checkout_placeholder_65">
+                <h2>כתובת למשלוח</h2>
+                <input type="text" placeholder="רחוב ומספר" id="shipping-street" required>
+                <input type="text" placeholder="דירה, קומה, כניסה" id="shipping-apartment">
+                <input type="text" placeholder="עיר" id="shipping-city" required>
+                <input type="text" placeholder="מיקוד" id="shipping-zip">
               </div>
             </div>
             <div class="order-summary">
-              <h2 data-i18n="checkout_h2_5">סיכום הזמנה</h2>
+              <h2>סיכום הזמנה</h2>
               <div id="order-items"></div>
               <div class="coupon-section">
-                <button type="button" class="coupon-toggle-btn" id="coupon-toggle-btn" data-i18n="checkout_btn_38">
-                  <svg width="16" height="16" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 12v6a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-6"></path><path d="M12 12V3"></path><path d="M8 8l4-4 4 4"></path></svg>
+                <button type="button" class="coupon-toggle-btn" id="coupon-toggle-btn">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 12v6a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-6"/><path d="M12 12V3"/><path d="M8 8l4-4 4 4"/></svg>
                   יש לי קוד קופון
                 </button>
                 <div class="coupon-input-wrapper" id="coupon-input-wrapper" style="display: none;">
                   <div class="coupon-input-row" id="coupon-input-row">
-                    <input type="text" placeholder="הזן קוד קופון" id="coupon-code-input" class="coupon-input" data-i18n-placeholder="checkout_placeholder_66">
-                    <button type="button" class="btn btn-secondary coupon-apply-btn" id="apply-coupon-btn" data-i18n="checkout_btn_39">החל</button>
-                    <button type="button" class="coupon-close-btn" id="coupon-close-btn" title="Close" data-i18n-title="checkout_title_74">
-                      <svg width="16" height="16" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"></path></svg>
+                    <input type="text" placeholder="הזן קוד קופון" id="coupon-code-input" class="coupon-input">
+                    <button type="button" class="btn btn-secondary coupon-apply-btn" id="apply-coupon-btn">החל</button>
+                    <button type="button" class="coupon-close-btn" id="coupon-close-btn" title="Close">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
                     </button>
                   </div>
                 </div>
                 <div class="coupon-applied-row" id="coupon-applied-row" style="display: none;">
                   <span class="coupon-badge" id="applied-coupon-code"></span>
-                  <button type="button" class="coupon-remove-btn" id="remove-coupon-btn" data-i18n="checkout_btn_40">הסר</button>
+                  <button type="button" class="coupon-remove-btn" id="remove-coupon-btn">הסר</button>
                 </div>
                 <div class="coupon-error" id="coupon-error" style="display: none;"></div>
               </div>
               <div class="order-totals">
-                <div>סכום ביניים: <span id="subtotal" data-i18n="checkout_span_16">₪0</span></div>
-                <div class="vat-row" id="vat-row">כולל מע"מ: <span id="vat-amount" data-i18n="checkout_span_17">₪0</span></div>
-                <div>משלוח: <span id="shipping-cost" data-i18n="checkout_span_18">₪0</span></div>
-                <div class="discount-row" id="discount-row" style="display: none;">הנחה: <span id="discount" data-i18n="checkout_span_19">-₪0</span></div>
-                <div class="total">סה"כ לתשלום: <span id="order-total" data-i18n="checkout_span_20">₪0</span></div>
+                <div>סכום ביניים: <span id="subtotal">₪0</span></div>
+                <div class="vat-row" id="vat-row">כולל מע"מ: <span id="vat-amount">₪0</span></div>
+                <div>משלוח: <span id="shipping-cost">₪0</span></div>
+                <div class="discount-row" id="discount-row" style="display: none;">הנחה: <span id="discount">-₪0</span></div>
+                <div class="total">סה"כ לתשלום: <span id="order-total">₪0</span></div>
               </div>
               <div id="checkout-payment-section">
                 <div class="checkout-step payment-step">
-                  <h2 data-i18n="checkout_h2_6">תשלום</h2>
+                  <h2>תשלום</h2>
                   <div id="payment-container">טוען אפשרויות תשלום...</div>
                 </div>
-                <button class="btn btn-primary" id="place-order-btn" data-i18n="checkout_btn_41">בצע הזמנה</button>
+                <button class="btn btn-primary" id="place-order-btn">בצע הזמנה</button>
               </div>
               <div id="greeninvoice-iframe-container" style="display: none;">
                 <div class="greeninvoice-iframe-wrapper">
@@ -1117,8 +1116,8 @@ html[dir="rtl"] body {
   <div class="footer-container">
     <div class="footer-grid">
       <div class="footer-column footer-about">
-        <img src="/assets/business-logo.webp" alt="מיס לוסי" class="logo" data-i18n-alt="checkout_alt_68">
-        <p class="footer-description" data-i18n="checkout_p_11">מיס לוסי - חוויה קולינרית ייחודית המשלבת טעמים מסורתיים עם נגיעה מודרנית. מזמינים אתכם ליהנות ממנות מעולפות אהבה.</p>
+        <img src="/assets/business-logo.webp" alt="מיס לוסי" class="logo" data-i18n-alt="home_alt_82">
+        <p class="footer-description" data-i18n="home_p_29">מיס לוסי - חוויה קולינרית ייחודית המשלבת טעמים מסורתיים עם נגיעה מודרנית. מזמינים אתכם ליהנות ממנות מעולפות אהבה.</p>
         <div class="social-links">
           <a href="[facebook_handle]" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
           <a href="[instagram_handle]" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
@@ -1127,46 +1126,46 @@ html[dir="rtl"] body {
       </div>
       
       <div class="footer-column footer-links">
-        <h3 data-i18n="checkout_h3_8">קישורים מהירים</h3>
+        <h3 data-i18n="home_h3_13">קישורים מהירים</h3>
         <ul>
-          <li data-i18n="checkout_li_42"><a href="/about" data-i18n="checkout_link_25">אודות</a></li>
-          <li data-i18n="checkout_li_43"><a href="/menu" data-i18n="checkout_link_26">תפריט</a></li>
-          <li data-i18n="checkout_li_44"><a href="/contact" data-i18n="checkout_link_27">צור קשר</a></li>
+          <li data-i18n="home_li_53"><a href="/about" data-i18n="home_link_42">אודות</a></li>
+          <li data-i18n="home_li_54"><a href="/menu" data-i18n="home_link_43">תפריט</a></li>
+          <li data-i18n="home_li_55"><a href="/contact" data-i18n="home_link_44">צור קשר</a></li>
         </ul>
       </div>
       
       <div class="footer-column footer-contact">
-        <h3 data-i18n="checkout_h3_9">יצירת קשר</h3>
+        <h3 data-i18n="home_h3_14">יצירת קשר</h3>
         <ul>
-          <li data-i18n="checkout_li_45">
+          <li data-i18n="home_li_56">
             <i class="fas fa-envelope"></i>
-            <a href="mailto:[business_email]" data-i18n="checkout_link_28">[business_email]</a>
+            <a href="mailto:[business_email]" data-i18n="home_link_45">[business_email]</a>
           </li>
-          <li data-i18n="checkout_li_46">
+          <li data-i18n="home_li_57">
             <i class="fas fa-phone"></i>
-            <a href="tel:[business_phone]" data-i18n="checkout_link_29">[business_phone]</a>
+            <a href="tel:[business_phone]" data-i18n="home_link_46">[business_phone]</a>
           </li>
-          <li data-i18n="checkout_li_47"><a href="/about" data-i18n="checkout_link_30"><i class="fas fa-map-marker-alt"></i>
-            <span data-i18n="checkout_span_21">[business_address]</span></a></li>
+          <li data-i18n="home_li_58"><a href="/about" data-i18n="home_link_47"><i class="fas fa-map-marker-alt"></i>
+            <span data-i18n="home_span_32">[business_address]</span></a></li>
         </ul>
       </div>
       
       <div class="footer-column footer-legal">
-        <h3 data-i18n="checkout_h3_10">מידע משפטי</h3>
+        <h3 data-i18n="home_h3_15">מידע משפטי</h3>
         <ul>
-          <li data-i18n="checkout_li_48"><a href="/privacy" data-i18n="checkout_link_31">מדיניות פרטיות</a></li>
-          <li data-i18n="checkout_li_49"><a href="/terms" data-i18n="checkout_link_32">תנאים והגבלות</a><span class="separator">|</span>
-            <a href="/return-policy" aria-label="מדיניות החזרות" data-i18n="checkout_link_33">
+          <li data-i18n="home_li_59"><a href="/privacy" data-i18n="home_link_48">מדיניות פרטיות</a></li>
+          <li data-i18n="home_li_60"><a href="/terms" data-i18n="home_link_49">תנאים והגבלות</a><span class="separator">|</span>
+            <a href="/return-policy" aria-label="מדיניות החזרות" data-i18n="home_link_50">
               מדיניות החזרות
             </a></li>
-          <li data-i18n="checkout_li_50"><a href="/accessibility" data-i18n="checkout_link_34">הצהרת נגישות</a></li>
+          <li data-i18n="home_li_61"><a href="/accessibility" data-i18n="home_link_51">הצהרת נגישות</a></li>
         </ul>
       </div>
     </div>
     
     <div class="footer-bottom">
-      <p class="copyright" data-i18n="checkout_p_12">© 2026 מיס לוסי. כל הזכויות שמורות.</p>
-      <a href="https://zappy5.com" target="_blank" class="zappy-attribution" data-i18n="checkout_link_35">Generated by Zappy</a>
+      <p class="copyright" data-i18n="home_p_30">© 2026 מיס לוסי. כל הזכויות שמורות.</p>
+      <a href="https://zappy5.com" target="_blank" class="zappy-attribution" data-i18n="home_link_52">Generated by Zappy</a>
     </div>
   </div>
 </footer>
@@ -1174,9 +1173,9 @@ html[dir="rtl"] body {
 <div class="cart-drawer-overlay" id="cart-drawer-overlay"></div>
 <aside class="cart-drawer rtl" id="cart-drawer" dir="rtl">
   <div class="cart-drawer-header">
-    <h2 data-i18n="checkout_h2_7">עגלת הקניות שלך</h2>
+    <h2>עגלת הקניות שלך</h2>
     <button type="button" class="cart-drawer-close" id="cart-drawer-close" aria-label="סגור">
-      <svg width="24" height="24" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"></path></svg>
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
     </button>
   </div>
   <div class="cart-drawer-body" id="cart-drawer-items">
@@ -1184,10 +1183,10 @@ html[dir="rtl"] body {
   </div>
   <div class="cart-drawer-footer">
     <div class="cart-drawer-total">
-      <span data-i18n="checkout_span_22">סה"כ:</span>
-      <span id="cart-drawer-total" data-i18n="checkout_span_23">₪0</span>
+      <span>סה"כ:</span>
+      <span id="cart-drawer-total">₪0</span>
     </div>
-    <a href="/checkout" class="cart-drawer-checkout" data-i18n="checkout_link_36">המשך לתשלום</a>
+    <a href="/checkout" class="cart-drawer-checkout">המשך לתשלום</a>
   </div>
 </aside>
   <!-- Mobile Menu Script for E-commerce Pages -->

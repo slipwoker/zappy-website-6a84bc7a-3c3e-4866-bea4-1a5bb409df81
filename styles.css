@@ -5294,6 +5294,1064 @@ body.accessibility-widget-visible ._access-menu {
     display: none !important;
   }
 }
+
+
+/* ============================================
+   DIRECTION OVERRIDE STYLES
+   Only set direction property, NOT text-align
+   This preserves centered elements
+   ============================================ */
+
+/* Base direction for LTR */
+html[dir="ltr"], html[dir="ltr"] body {
+  direction: ltr !important;
+}
+
+html[dir="ltr"] main,
+html[dir="ltr"] article,
+html[dir="ltr"] section,
+html[dir="ltr"] .content,
+html[dir="ltr"] .container,
+html[dir="ltr"] .wrapper {
+  direction: ltr !important;
+}
+
+/* ONLY apply text-align to legal page content that needs LTR alignment */
+html[dir="ltr"] .legal-content,
+html[dir="ltr"] .terms-content,
+html[dir="ltr"] .privacy-content,
+html[dir="ltr"] .legal-content p,
+html[dir="ltr"] .terms-content p,
+html[dir="ltr"] .privacy-content p,
+html[dir="ltr"] .legal-content li,
+html[dir="ltr"] .terms-content li,
+html[dir="ltr"] .privacy-content li {
+  direction: ltr !important;
+  text-align: left !important;
+}
+
+/* Base direction for RTL */
+html[dir="rtl"], html[dir="rtl"] body {
+  direction: rtl !important;
+}
+
+html[dir="rtl"] main,
+html[dir="rtl"] article,
+html[dir="rtl"] section,
+html[dir="rtl"] .content,
+html[dir="rtl"] .container,
+html[dir="rtl"] .wrapper {
+  direction: rtl !important;
+}
+
+/* ONLY apply text-align to legal page content that needs RTL alignment */
+.legal-content,
+html[dir="rtl"] .terms-content,
+html[dir="rtl"] .privacy-content,
+html[dir="rtl"] .legal-content p,
+html[dir="rtl"] .terms-content p,
+html[dir="rtl"] .privacy-content p,
+html[dir="rtl"] .legal-content li,
+html[dir="rtl"] .terms-content li,
+html[dir="rtl"] .privacy-content li{text-align: right !important;}html[dir="rtl"] .legal-content,
+html[dir="rtl"] .terms-content,
+html[dir="rtl"] .privacy-content,
+html[dir="rtl"] .legal-content p,
+html[dir="rtl"] .terms-content p,
+html[dir="rtl"] .privacy-content p,
+html[dir="rtl"] .legal-content li,
+html[dir="rtl"] .terms-content li,
+html[dir="rtl"] .privacy-content li{direction: rtl !important;}
+
+
+/* ============================================
+   V2 NAVIGATION FIX
+   CRITICAL: For V2 sites created in RTL (Hebrew), the nav elements
+   inherit direction:rtl from the body. This reverses how flex order
+   is interpreted. For LTR pages, we MUST set direction:ltr on nav
+   containers to make the flex order work correctly.
+   
+   This section is ONLY included for V2 sites (detected by nav-right-group
+   or nav-cta-container classes) to avoid affecting V1 site layouts.
+   ============================================ */
+
+/* Fix V2 navbar layout for LTR pages */
+/* Direction must apply to all screen sizes, but flex-direction: row is desktop-only */
+html[dir="ltr"] header,
+html[dir="ltr"] nav,
+html[dir="ltr"] .navbar,
+html[dir="ltr"] .nav-container {
+  direction: ltr !important;
+}
+
+html[dir="ltr"] .nav-right-group {
+  direction: ltr !important;
+  order: -1 !important;
+}
+
+html[dir="ltr"] .nav-cta-container {
+  direction: ltr !important;
+  order: 1 !important;
+  margin-left: auto !important;
+}
+
+html[dir="ltr"] .nav-menu,
+html[dir="ltr"] #navMenu {
+  direction: ltr !important;
+}
+
+html[dir="ltr"] .nav-brand {
+  direction: ltr !important;
+  order: -1 !important;
+}
+
+/* DESKTOP ONLY: Horizontal flex layout for navbar elements */
+@media (min-width: 769px) {
+  html[dir="ltr"] header,
+  html[dir="ltr"] nav,
+  html[dir="ltr"] .navbar,
+  html[dir="ltr"] .nav-container {
+    flex-direction: row !important;
+  }
+  
+  html[dir="ltr"] .nav-right-group,
+  html[dir="ltr"] .nav-cta-container {
+    flex-direction: row !important;
+  }
+  
+  html[dir="ltr"] .nav-menu,
+  html[dir="ltr"] #navMenu {
+    flex-direction: row !important;
+  }
+}
+
+
+/* Language Switcher Container - Fixed Position */
+.zappy-lang-switcher-container {
+  position: fixed;
+  top: 12px;
+  right: 12px;
+  z-index: 9999;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* RTL: Move to left side */
+.zappy-lang-switcher-container{right: auto;left: 12px;}
+
+/* Language Switcher Styles */
+.lang-switcher {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* Language switcher positioning - minimal, only gap spacing */
+/* NOTE: Removed margin-left:auto rules that broke V2 layouts */
+/* V2 layouts handle positioning via flexbox, we just add small gap */
+header .lang-switcher,
+nav .lang-switcher,
+.navbar .lang-switcher {
+  margin-left: 8px;
+  margin-right: 8px;
+}
+
+.lang-switcher-current {
+  display: flex;
+  align-items: center;
+  padding: 8px;
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  color: inherit;
+  transition: opacity 0.2s ease;
+}
+
+.lang-switcher-current:hover {
+  opacity: 0.7;
+}
+
+/* ===========================================
+   LANGUAGE DROPDOWN POSITIONING
+   CRITICAL: position: absolute !important overrides any
+   mobile responsive CSS that resets absolute positioning
+   to relative. The dropdown MUST be absolutely positioned
+   relative to its parent .lang-switcher.
+   
+   HIGH SPECIFICITY SELECTORS needed to override:
+   [style*="position: absolute"]:not(...) { position: relative !important }
+   That selector has specificity ~0,4,0 so we need 0,5,0+ to win
+   =========================================== */
+.lang-switcher-dropdown,
+.lang-switcher .lang-switcher-dropdown,
+div.lang-switcher-dropdown,
+.nav-cta-container .lang-switcher .lang-switcher-dropdown,
+.navbar .nav-cta-container .lang-switcher-dropdown {
+  position: absolute !important;
+  top: 100% !important;
+  /* Default LTR: align dropdown's left edge to switcher's left edge */
+  left: 0;
+  right: auto;
+  margin-top: 6px;
+  min-width: 150px;
+  background: white;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-8px);
+  transition: all 0.2s ease;
+  overflow: hidden;
+  z-index: 1002 !important;
+}
+
+/* Ultra-high specificity override for problematic mobile responsive CSS */
+/* The problematic rule [style*="position: absolute"]:not():not():not() has specificity 0,4,0 */
+/* We need 0,5,0+ to win, so we add extra class/attribute selectors */
+.lang-switcher .lang-switcher-dropdown[style*="position: absolute"],
+.lang-switcher .lang-switcher-dropdown[style*="position:absolute"],
+.nav-cta-container .lang-switcher .lang-switcher-dropdown[style],
+.navbar .nav-cta-container .lang-switcher-dropdown[style],
+div.lang-switcher > div.lang-switcher-dropdown[style] {
+  position: absolute !important;
+  top: 100% !important;
+  /* Default LTR: align to left */
+  left: 0;
+  right: auto;
+}
+
+.lang-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 12px 16px;
+  background: none;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  font-size: 14px;
+  color: #333;
+  transition: background 0.15s ease;
+}
+
+.lang-option{text-align: right;}
+
+/* RTL: align dropdown's right edge to switcher's right edge */
+.lang-switcher-dropdown,
+html[lang="he"] .lang-switcher-dropdown,
+html[lang="ar"] .lang-switcher-dropdown{right: 0;left: auto;}
+
+.lang-option:hover {
+  background: #f5f5f5;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .zappy-lang-switcher-container {
+    top: 8px;
+    right: 8px;
+  }
+  
+  .zappy-lang-switcher-container{right: auto;left: 8px;}
+  
+  .lang-switcher-current {
+    padding: 6px;
+  }
+  
+  .lang-option {
+    padding: 10px 14px;
+    font-size: 13px;
+  }
+  
+  /* FIX: Prevent lang-switcher-dropdown from extending past viewport in RTL mobile */
+  /* The dropdown was causing horizontal overflow with left: 0 in RTL */
+  .lang-switcher-dropdown{left: auto !important;right: 0 !important;}
+}
+
+/* ===========================================
+   RTL MOBILE HORIZONTAL OVERFLOW FIX
+   Prevents left whitespace gap in RTL mobile
+   caused by elements extending past viewport
+   =========================================== */
+
+/* Prevent horizontal scroll on RTL pages */
+,
+html[dir="rtl"] body{overflow-x: hidden !important;max-width: 100vw !important;}
+
+/* Ensure carousel containers clip overflow to prevent horizontal scroll */
+.zappy-carousel-container,
+.zappy-carousel-wrapper,
+.benefits-section,
+.testimonials-section,
+[class*="carousel"] {
+  overflow-x: hidden !important;
+}
+
+/* Ensure lang-switcher parent clips its positioned children */
+.lang-switcher {
+  overflow: visible; /* Keep visible for dropdown to show */
+}
+
+/* ===========================================
+   MOBILE NAV BUTTON POSITIONING
+   CSS handles positioning based on html[dir] attribute.
+   This allows dynamic RTL/LTR switching without inline styles.
+   
+   LTR (default): hamburger LEFT (20px), phone RIGHT (20px)
+   RTL: hamburger RIGHT (20px), phone LEFT (20px) - mirrored
+   =========================================== */
+@media (max-width: 768px) {
+  /* Base positioning and visibility for mobile nav buttons */
+  /* CRITICAL: display: flex overrides any desktop display: none rules */
+  .mobile-toggle,
+  .phone-header-btn {
+    display: flex !important;
+    position: absolute !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    z-index: 1001 !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 44px !important;
+    height: 44px !important;
+    background: none !important;
+    border: none !important;
+    cursor: pointer !important;
+  }
+  
+  /* Phone button color - use accent color for visibility */
+  .phone-header-btn {
+    color: var(--accent, #f59e0b) !important;
+  }
+  
+  .phone-header-btn svg {
+    width: 24px !important;
+    height: 24px !important;
+    fill: currentColor !important;
+  }
+  
+  /* LTR positioning (default) - hamburger LEFT, phone RIGHT */
+  html:not([dir="rtl"]):not([lang="he"]):not([lang="ar"]) .mobile-toggle,
+  html[dir="ltr"] .mobile-toggle {
+    left: 20px !important;
+    right: auto !important;
+  }
+  
+  html:not([dir="rtl"]):not([lang="he"]):not([lang="ar"]) .phone-header-btn,
+  html[dir="ltr"] .phone-header-btn {
+    right: 20px !important;
+    left: auto !important;
+  }
+  
+  /* LTR mobile menu slides from LEFT */
+  html:not([dir="rtl"]):not([lang="he"]):not([lang="ar"]) .nav-menu,
+  html[dir="ltr"] .nav-menu {
+    left: 0 !important;
+    right: auto !important;
+  }
+  
+  /* ===========================================
+     MOBILE NAV MENU - VERTICAL LAYOUT FIX
+     CRITICAL: Override any desktop flex-direction: row rules
+     The mobile menu MUST stack vertically (column), not horizontally (row)
+     =========================================== */
+  html[dir="ltr"] .nav-menu,
+  html[dir="ltr"] .nav-menu.active,
+  html[dir="ltr"] #navMenu,
+  html[dir="ltr"] #navMenu.active,
+  html:not([dir="rtl"]):not([lang="he"]):not([lang="ar"]) .nav-menu,
+  html:not([dir="rtl"]):not([lang="he"]):not([lang="ar"]) .nav-menu.active {
+    flex-direction: column !important;
+    align-items: stretch !important;
+  }
+  
+  /* RTL mobile menu - also vertical layout */
+  .nav-menu,
+  html[dir="rtl"] .nav-menu.active,
+  html[dir="rtl"] #navMenu,
+  html[dir="rtl"] #navMenu.active,
+  html[lang="he"] .nav-menu,
+  html[lang="he"] .nav-menu.active,
+  html[lang="ar"] .nav-menu,
+  html[lang="ar"] .nav-menu.active{flex-direction: column !important;align-items: stretch !important;}
+  
+  /* LTR mobile menu text alignment - left aligned */
+  html:not([dir="rtl"]):not([lang="he"]):not([lang="ar"]) .nav-menu li,
+  html:not([dir="rtl"]):not([lang="he"]):not([lang="ar"]) .nav-menu a,
+  html[dir="ltr"] .nav-menu li,
+  html[dir="ltr"] .nav-menu a {
+    text-align: left !important;
+  }
+  
+  /* ===========================================
+     LTR MOBILE NAV-CONTAINER LAYOUT FIX
+     V2 sites have nav-container with flex-direction: row-reverse
+     for RTL. For LTR, we need flex-direction: row and centered logo.
+     =========================================== */
+  html[dir="ltr"] .nav-container,
+  html:not([dir="rtl"]):not([lang="he"]):not([lang="ar"]) .nav-container {
+    flex-direction: row !important;
+    justify-content: center !important;
+  }
+  
+  /* LTR: Center the logo/nav-brand in mobile navbar */
+  html[dir="ltr"] .nav-brand,
+  html:not([dir="rtl"]):not([lang="he"]):not([lang="ar"]) .nav-brand {
+    order: 0 !important;
+    margin: 0 auto !important;
+  }
+  
+  /* RTL: Center the logo/nav-brand in mobile navbar */
+  .nav-brand,
+  html[lang="he"] .nav-brand,
+  html[lang="ar"] .nav-brand{order: 0 !important;margin: 0 auto !important;}
+  
+  /* RTL lang-switcher dropdown constraint */
+  .lang-switcher{position: relative;}
+  
+  .lang-switcher-dropdown{left: auto !important;right: 0 !important;max-width: calc(100vw - 20px);}
+  
+  /* ===========================================
+     RTL MOBILE NAV BUTTON POSITIONING
+     In RTL: hamburger RIGHT, phone LEFT (mirror of LTR)
+     =========================================== */
+  .mobile-toggle,
+  html[lang="he"] .mobile-toggle,
+  html[lang="ar"] .mobile-toggle{left: auto !important;right: 20px !important;}
+  
+  .phone-header-btn,
+  html[lang="he"] .phone-header-btn,
+  html[lang="ar"] .phone-header-btn{left: 20px !important;right: auto !important;}
+  
+  /* RTL mobile menu slides from RIGHT */
+  .nav-menu,
+  html[lang="he"] .nav-menu,
+  html[lang="ar"] .nav-menu{left: auto !important;right: 0 !important;}
+  
+  /* ===========================================
+     V2 MOBILE LANGUAGE SWITCHER FIX
+     V2 sites hide .nav-cta-container on mobile but we need
+     the language switcher to remain visible. Position it
+     between the phone button and the hamburger menu.
+     =========================================== */
+  .nav-cta-container {
+    display: flex !important;
+    position: absolute !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    background: transparent !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    width: auto !important;
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+    z-index: 1001 !important;
+  }
+  
+  /* Hide CTA button inside container on mobile */
+  .nav-cta-container .nav-cta-btn,
+  .nav-cta-container > a:not(.lang-option):not(.lang-switcher-current) {
+    display: none !important;
+  }
+  
+  /* Keep language switcher visible and compact */
+  .nav-cta-container .lang-switcher {
+    display: flex !important;
+    margin: 0 !important;
+    width: auto !important;
+    position: relative !important;
+  }
+  
+  /* ===========================================
+     MOBILE LANGUAGE DROPDOWN POSITIONING FIX
+     CRITICAL: Override the mobile responsive CSS that sets
+     [style*="position: absolute"]:not():not():not() { position: relative !important }
+     That rule has specificity 0,4,0 - we need 0,5,0+ to win.
+     The dropdown MUST use position: absolute to appear below the button.
+     =========================================== */
+  .navbar .nav-cta-container .lang-switcher .lang-switcher-dropdown,
+  .nav-cta-container .lang-switcher .lang-switcher-dropdown[style],
+  .lang-switcher .lang-switcher-dropdown[style*="position"],
+  div.lang-switcher > div.lang-switcher-dropdown[style],
+  [class*="lang-switcher"] .lang-switcher-dropdown[style] {
+    position: absolute !important;
+    top: 100% !important;
+    margin-top: 8px !important;
+    min-width: 140px !important;
+    background: white !important;
+    border-radius: 8px !important;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15) !important;
+    z-index: 1002 !important;
+    /* Override any transform that might affect positioning */
+    transform: none !important;
+  }
+  
+  /* When dropdown is visible, ensure positioning is correct - high specificity */
+  .navbar .nav-cta-container .lang-switcher-dropdown[style*="visibility: visible"],
+  .navbar .nav-cta-container .lang-switcher-dropdown[style*="opacity: 1"],
+  .lang-switcher .lang-switcher-dropdown[style*="visibility: visible"],
+  .lang-switcher .lang-switcher-dropdown[style*="opacity: 1"] {
+    position: absolute !important;
+    top: 100% !important;
+  }
+  
+  /* LTR: dropdown aligns to left - high specificity to override [style*] rules */
+  html:not([dir="rtl"]):not([lang="he"]):not([lang="ar"]) .navbar .lang-switcher-dropdown,
+  html:not([dir="rtl"]):not([lang="he"]):not([lang="ar"]) .lang-switcher .lang-switcher-dropdown,
+  html[dir="ltr"] .navbar .lang-switcher-dropdown,
+  html[dir="ltr"] .lang-switcher .lang-switcher-dropdown {
+    left: 0 !important;
+    right: auto !important;
+  }
+  
+  /* RTL: dropdown aligns to right - high specificity to override [style*] rules */
+  .navbar .lang-switcher-dropdown,
+  html[dir="rtl"] .lang-switcher .lang-switcher-dropdown,
+  html[lang="he"] .navbar .lang-switcher-dropdown,
+  html[lang="he"] .lang-switcher .lang-switcher-dropdown,
+  html[lang="ar"] .navbar .lang-switcher-dropdown,
+  html[lang="ar"] .lang-switcher .lang-switcher-dropdown{right: 0 !important;left: auto !important;}
+  
+  /* LTR: position near hamburger (which is at left: 20px), to its right */
+  html:not([dir="rtl"]):not([lang="he"]):not([lang="ar"]) .nav-cta-container,
+  html[dir="ltr"] .nav-cta-container {
+    left: 30px !important;
+    right: auto !important;
+  }
+  
+  /* RTL: position near hamburger (which is at right: 20px) */
+  /* nav-cta-container is inside nav-container, so we position it at the right edge */
+  /* of nav-container to get it closer to the hamburger */
+  .nav-cta-container,
+  html[lang="he"] .nav-cta-container,
+  html[lang="ar"] .nav-cta-container{right: 30px !important;left: auto !important;}
+  
+  /* Language switcher preserves its inline color/fill set during generation */
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   V2 E-COMMERCE MOBILE FIXES (Applied: 2026-01-29T13:34:22.234Z)
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Fix 1: Navbar must be fixed for e-commerce header stacking */
+@media (max-width: 768px) {
+  .navbar, nav.navbar {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    z-index: 1000 !important;
+    margin: 0 !important;
+  }
+  
+  /* Catalog menu should be below navbar */
+  .zappy-catalog-menu {
+    top: 61px !important;
+  }
+}
+
+/* Fix 2: Search toggle button sizing on mobile */
+@media (max-width: 768px) {
+  .nav-search-toggle {
+    width: 40px !important;
+    height: 40px !important;
+    min-width: 40px !important;
+    flex-shrink: 0 !important;
+    padding: 8px !important;
+  }
+  
+  .nav-icons-right {
+    width: auto !important;
+    min-width: auto !important;
+  }
+}
+
+/* Fix 3: Mobile search panel RTL fix */
+@media (max-width: 768px) {
+  .mobile-search-panel .search-wrapper,
+  html[lang="he"] .mobile-search-panel .search-wrapper,
+  html[lang="ar"] .mobile-search-panel .search-wrapper{flex-direction: row-reverse !important;}
+  
+  .mobile-search-panel #mobile-search-input {
+    flex: 1 1 auto !important;
+    width: auto !important;
+    min-width: 200px !important;
+  }
+  
+  .mobile-search-panel .close-search {
+    width: 40px !important;
+    height: 40px !important;
+    flex: 0 0 40px !important;
+    min-width: 40px !important;
+    max-width: 40px !important;
+    padding: 0 !important;
+  }
+}
+
+/* Fix 4: Hamburger button padding fix - prevent icon squeeze */
+@media (max-width: 768px) {
+  .mobile-toggle, #mobileToggle {
+    padding: 10px !important;
+    width: 44px !important;
+    height: 44px !important;
+  }
+  
+  .mobile-toggle svg.hamburger-icon,
+  .mobile-toggle svg.close-icon,
+  #mobileToggle svg.hamburger-icon,
+  #mobileToggle svg.close-icon {
+    width: 24px !important;
+    height: 24px !important;
+    min-width: 24px !important;
+    flex-shrink: 0 !important;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   V2 E-COMMERCE ACCENT COLOR FIXES (Applied: 2026-01-29T13:34:52.845Z)
+   Theme: LIGHT
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Fix 1: Product card price - inherit color from parent instead of using --primary */
+.product-card .price {
+  color: inherit !important;
+}
+
+/* Fix 2: Product card Add to Cart button - use accent color with primary fallback */
+.product-card .add-to-cart {
+  background: var(--accent, var(--primary)) !important;
+  color: var(--text-light) !important;
+}
+
+/* Fix 3: Product info Add to Cart button (product detail page) */
+.product-info .add-to-cart-btn {
+  background: var(--accent, var(--primary)) !important;
+  color: var(--text-light) !important;
+}
+
+/* Fix 4: Variant option selected state */
+.variant-option.selected {
+  border-color: var(--accent, var(--primary)) !important;
+  background: var(--accent, var(--primary)) !important;
+  color: var(--text-light) !important;
+}
+.variant-option:hover {
+  border-color: var(--accent, var(--primary)) !important;
+}
+
+/* Fix 5: Cart drawer checkout button */
+.cart-drawer-checkout {
+  background: var(--accent, var(--primary)) !important;
+  color: var(--text-light) !important;
+}
+
+/* Fix 6: Checkout button in cart page */
+.checkout-btn {
+  background: var(--accent, var(--primary)) !important;
+  color: var(--text-light) !important;
+}
+
+/* Fix 7: Coupon apply button */
+.coupon-apply-btn {
+  background: var(--accent, var(--primary)) !important;
+  color: var(--text-light) !important;
+}
+
+/* Fix 8: Generic primary button */
+.btn-primary {
+  background: var(--accent, var(--primary)) !important;
+  color: var(--text-light) !important;
+}
+
+/* Fix 9: Quantity buttons - ensure visibility */
+.quantity-btn {
+  border-color: var(--accent, var(--primary)) !important;
+  color: var(--accent, var(--primary)) !important;
+}
+.quantity-btn:hover {
+  background: var(--accent, var(--primary)) !important;
+  color: var(--text-light) !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SUBMENU VISIBILITY FIXES
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Fix 10: Navbar submenu - always light background for readability */
+.navbar .sub-menu,
+.navbar ul.sub-menu,
+nav.navbar .sub-menu {
+  background: var(--bg-light) !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3) !important;
+  margin: 0 !important;
+  padding-top: 12px !important;
+}
+.navbar .sub-menu li a,
+nav.navbar .sub-menu li a {
+  color: var(--text-dark) !important;
+}
+.navbar .sub-menu li a:hover,
+nav.navbar .sub-menu li a:hover {
+  background: rgba(0,0,0,0.05) !important;
+  color: var(--accent, var(--primary)) !important;
+}
+
+/* Fix 11: Bridge element to prevent submenu from disappearing on hover */
+.navbar .menu-item-has-children,
+nav.navbar .menu-item-has-children,
+.zappy-products-dropdown {
+  position: relative !important;
+}
+.navbar .menu-item-has-children::after,
+nav.navbar .menu-item-has-children::after,
+.zappy-products-dropdown::after {
+  content: '' !important;
+  position: absolute !important;
+  bottom: -10px !important;
+  left: 0 !important;
+  right: 0 !important;
+  height: 10px !important;
+}
+
+/* Fix 12: Catalog dropdown submenu - same light background */
+.zappy-products-dropdown .sub-menu {
+  background: var(--bg-light) !important;
+  margin: 0 !important;
+  padding-top: 12px !important;
+}
+.zappy-products-dropdown .sub-menu a {
+  color: var(--text-dark) !important;
+}
+.zappy-products-dropdown .sub-menu a:hover {
+  background: rgba(0,0,0,0.05) !important;
+  color: var(--accent, var(--primary)) !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   MOBILE NAV ICON FIXES
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Fix 13: Mobile nav icon buttons - consistent sizing */
+@media (max-width: 768px) {
+  .cart-link,
+  .nav-cart,
+  .nav-search-toggle,
+  .login-link,
+  .nav-login {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 40px !important;
+    height: 40px !important;
+    min-width: 40px !important;
+    padding: 0 !important;
+    position: relative !important;
+    overflow: visible !important;
+  }
+  
+  .cart-link svg,
+  .nav-cart svg,
+  .nav-search-toggle svg,
+  .login-link svg,
+  .nav-login svg,
+  .cart-icon {
+    width: 22px !important;
+    height: 22px !important;
+    min-width: 22px !important;
+    flex-shrink: 0 !important;
+  }
+  
+  /* Cart count badge - RTL: left, LTR: right */
+  .cart-count {
+    position: absolute !important;
+    top: -2px !important;
+    min-width: 18px !important;
+    height: 18px !important;
+    font-size: 11px !important;
+    font-weight: 600 !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0 4px !important;
+  }
+  
+  .cart-count,
+  [dir='rtl'] .cart-count{left: -6px !important;right: auto !important;}
+  
+  html:not([dir='rtl']) .cart-count {
+    right: -6px !important;
+    left: auto !important;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   MOBILE SEARCH PANEL FIXES
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Fix 14: Mobile search panel layout */
+.mobile-search-panel .search-wrapper {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  gap: 8px !important;
+  width: 100% !important;
+  padding: 0 16px !important;
+}
+
+.mobile-search-panel input,
+.mobile-search-panel #mobile-search-input {
+  flex: 1 1 auto !important;
+  min-width: 100px !important;
+  height: 44px !important;
+  padding: 12px 16px !important;
+  border-radius: 8px !important;
+  font-size: 16px !important;
+  order: 1 !important;
+}
+
+/* Fix 15: Search submit button - accent color */
+.mobile-search-panel .search-submit,
+.mobile-search-panel #mobile-search-submit {
+  flex: 0 0 44px !important;
+  width: 44px !important;
+  height: 44px !important;
+  min-width: 44px !important;
+  padding: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 8px !important;
+  background: var(--accent, var(--primary)) !important;
+  border: none !important;
+  order: 2 !important;
+}
+
+.mobile-search-panel .search-submit svg {
+  width: 24px !important;
+  height: 24px !important;
+  min-width: 24px !important;
+  min-height: 24px !important;
+  stroke: #ffffff !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   CLOSE BUTTON VISIBILITY FIXES (mobile search panel)
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Fix 16: Close button visibility and styling */
+.mobile-search-panel .close-search {
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 44px !important;
+  height: 44px !important;
+  min-width: 44px !important;
+  background: transparent !important;
+  border: 1px solid var(--border-light) !important;
+  border-radius: 8px !important;
+  cursor: pointer !important;
+  color: var(--text-dark) !important;
+  flex-shrink: 0 !important;
+  order: 3 !important;
+}
+.mobile-search-panel .close-search:hover {
+  background: rgba(0,0,0,0.05) !important;
+}
+.mobile-search-panel .close-search svg {
+  width: 20px !important;
+  height: 20px !important;
+  stroke: var(--text-dark) !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   MOBILE NAVBAR OVERLAP FIXES (iframe compatibility)
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Fix 17: Move search icon closer to hamburger to prevent logo overlap */
+@media (max-width: 768px) {
+  .nav-icons-right,
+  .nav-ecommerce-icons.nav-icons-right {
+    left: 42px !important;
+  }
+  
+  /* Fix 18: Compact button circles for iframe compatibility */
+  .cart-link,
+  .nav-cart,
+  .nav-search-toggle,
+  .login-link,
+  .nav-login {
+    width: 28px !important;
+    height: 28px !important;
+    min-width: 28px !important;
+  }
+  
+  /* Fix 19: Adjust cart badge for smaller buttons */
+  .cart-count {
+    top: -6px !important;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   CART DRAWER TEXT COLOR FIXES
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Fix 20: Cart item name - theme-aware text color */
+.cart-drawer-item-name,
+.cart-item-name {
+  color: var(--text-dark) !important;
+}
+
+/* Fix 21: Cart item price - use accent for visibility */
+.cart-drawer-item-price,
+.cart-item-price {
+  color: var(--accent, var(--secondary)) !important;
+  font-weight: 600 !important;
+}
+
+/* Fix 22: Cart item quantity - muted text */
+.cart-drawer-item-qty,
+.cart-item-qty {
+  color: var(--text-muted, var(--text-dark)) !important;
+}
+
+.cart-drawer-item-qty span,
+.cart-item-qty span {
+  color: var(--text-dark) !important;
+}
+
+/* Fix 23: Cart checkout button - accent color */
+.cart-drawer-checkout {
+  background: var(--accent, var(--primary)) !important;
+  color: #ffffff !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   CART DRAWER Z-INDEX FIXES (above announcement bar)
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Fix 24: Cart drawer overlay - higher than announcement bar (z-index 10001) */
+.cart-drawer-overlay {
+  z-index: 99998 !important;
+}
+
+/* Fix 25: Cart drawer - highest z-index to appear above all elements */
+.cart-drawer {
+  z-index: 99999 !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   PRODUCT DETAIL PAGE FIXES (V2 theme-aware styling)
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Fix 26: Product specifications box - theme-aware background */
+.product-specifications {
+  background: rgba(0,0,0,0.02) !important;
+  border: 1px solid var(--border-light) !important;
+  border-radius: 12px !important;
+  padding: 20px !important;
+}
+
+/* Fix 27: Specifications heading */
+.product-specifications h3,
+.product-specifications .specs-title {
+  color: var(--text-dark) !important;
+  margin-bottom: 16px !important;
+}
+
+/* Fix 28: Spec labels (cpu, ram, etc.) - muted color */
+.product-specifications .spec-name,
+.product-specifications td:last-child,
+.product-specifications th {
+  color: var(--text-muted, rgba(0,0,0,0.6)) !important;
+}
+
+/* Fix 29: Spec values (i7, 16GB, etc.) - full text color */
+.product-specifications .spec-value,
+.product-specifications td:first-child {
+  color: var(--text-dark) !important;
+}
+
+/* Fix 30: Quantity selector container */
+.product-quantity,
+.quantity-selector {
+  background: rgba(0,0,0,0.02) !important;
+  border: 1px solid var(--border-light) !important;
+  border-radius: 8px !important;
+}
+
+/* Fix 31: Quantity +/- buttons */
+.product-quantity button,
+.quantity-selector button,
+.qty-btn {
+  background: rgba(0,0,0,0.05) !important;
+  color: var(--text-dark) !important;
+  border: none !important;
+}
+
+/* Fix 32: Quantity input field */
+.product-quantity input,
+.quantity-selector input {
+  background: transparent !important;
+  color: var(--text-dark) !important;
+  border: none !important;
+}
+
+/* Fix 33: Quantity label */
+.product-quantity-label,
+.quantity-label,
+label[for="quantity"],
+.product-actions label,
+.product-info label {
+  color: var(--text-dark) !important;
+}
+
+/* Fix 34: Add to cart button - accent color */
+.product-info .add-to-cart-btn,
+.add-to-cart-btn,
+#add-to-cart-btn {
+  background: var(--accent, var(--primary)) !important;
+  color: #ffffff !important;
+}
+
+/* Fix 35: Product description text */
+.product-description,
+.product-info .product-description {
+  color: rgba(0,0,0,0.8) !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   CART DRAWER FOOTER FIXES (V2 theme-aware styling)
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Fix 36: Cart drawer footer - theme-aware background */
+.cart-drawer-footer {
+  background: var(--bg-light, #fff) !important;
+  border-top: 1px solid var(--border-light) !important;
+}
+
+/* Fix 37: Cart drawer total text */
+.cart-drawer-total,
+.cart-drawer-footer .total-label,
+.cart-drawer-footer .total-amount {
+  color: var(--text-dark) !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════ */
+
+
 /* ==ZAPPY E-COMMERCE CSS== */
 /* E-commerce Enhancement Styles - Inherits site theme colors */
 .ecommerce-page {
@@ -5312,6 +6370,8 @@ body.accessibility-widget-visible ._access-menu {
 .product-card .product-card-link { display: flex; flex-direction: column; flex: 1; text-decoration: none; color: inherit; }
 .product-card h3 { margin: 12px 0 8px; font-size: 16px; color: var(--text-color, var(--text, #1f2937)); min-height: 2.4em; line-height: 1.2em; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 .product-card p { font-size: 14px; color: var(--text-secondary, #6b7280); min-height: 3.6em; line-height: 1.2em; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; margin: 0 0 8px 0; flex-grow: 1; }
+.product-card ul { font-size: 14px; color: var(--text-secondary, #6b7280); line-height: 1.4em; margin: 0 0 8px 0; padding-inline-start: 20px; list-style-position: outside; }
+.product-card li { font-size: 14px; color: var(--text-secondary, #6b7280); margin-bottom: 4px; }
 .product-card .price { font-weight: 700; color: var(--primary-color, var(--primary, #ff0083)); font-size: 18px; margin-top: auto; padding-top: 8px; }
 .product-card .price .original-price { font-size: 14px; color: var(--text-secondary, #6b7280); text-decoration: line-through; margin-inline-start: 8px; font-weight: 400; }
 .product-card .add-to-cart { width: 100%; margin-top: 12px; padding: 10px; background: var(--primary-color, var(--primary, #ff0083)); color: var(--text-light, #fff); border: none; border-radius: 8px; cursor: pointer; font-weight: 600; transition: filter 0.2s; flex-shrink: 0; }
@@ -5615,11 +6675,11 @@ body.accessibility-widget-visible ._access-menu {
 }
 /* Position icons at edge of viewport using absolute positioning */
 @media (min-width: 769px) {
-  /* Position icons container at left edge (RTL) or right edge (LTR) */
+  /* Position icons container at end edge (right for LTR, left for RTL) - uses logical properties for dynamic language switching */
   .nav-ecommerce-icons.nav-icons-left {
     position: absolute !important;
-    left: 24px !important;
-    right: auto !important;
+    inset-inline-end: 24px !important;
+    inset-inline-start: auto !important;
     top: 50% !important;
     transform: translateY(-50%) !important;
     margin: 0 !important;
@@ -5631,7 +6691,7 @@ body.accessibility-widget-visible ._access-menu {
     position: static !important;
     transform: none !important;
     top: auto !important;
-    left: auto !important;
+    inset-inline-end: auto !important;
     margin: 0 !important;
     order: 0 !important;
     flex-shrink: 0 !important;
@@ -5764,26 +6824,27 @@ body {
     flex-shrink: 0 !important;
   }
   
-  /* Left icons group (Cart, Login) - positioned on left side */
+  /* Left icons group (Cart, Login) - positioned at end edge (right for LTR, left for RTL) */
   .nav-icons-left {
     order: 1 !important;
     position: absolute !important;
-    left: 12px !important;
+    inset-inline-end: 12px !important;
+    inset-inline-start: auto !important;
     top: 50% !important;
     transform: translateY(-50%) !important;
     z-index: 100 !important;
   }
   
-  /* Right icons group (Search) - positioned near hamburger with minimal gap */
+  /* Right icons group (Search) - positioned at start edge near hamburger */
   .nav-icons-right,
   .nav-ecommerce-icons.nav-icons-right {
     order: 3 !important;
     position: absolute !important;
-    right: 48px !important;
+    inset-inline-start: 48px !important;
+    inset-inline-end: auto !important;
     top: 50% !important;
     transform: translateY(-50%) !important;
     z-index: 100 !important;
-    margin-right: 2px !important;
     margin-inline-end: 2px !important;
     gap: 2px !important;
   }
@@ -6472,6 +7533,10 @@ main.page-container.ecommerce-page,
 .product-card p {
   color: var(--text-muted) !important;
 }
+.product-card ul,
+.product-card li {
+  color: var(--text-muted) !important;
+}
 
 /* Filter buttons - proper contrast for both themes */
 .filter-btn {
@@ -6574,547 +7639,6 @@ main.page-container.ecommerce-page,
 }
 
 /* ==END ZAPPY E-COMMERCE CSS== */
-
-/* ============================================
-   DIRECTION OVERRIDE STYLES
-   Only set direction property, NOT text-align
-   This preserves centered elements
-   ============================================ */
-
-/* Base direction for LTR */
-html[dir="ltr"], html[dir="ltr"] body {
-  direction: ltr !important;
-}
-
-html[dir="ltr"] main,
-html[dir="ltr"] article,
-html[dir="ltr"] section,
-html[dir="ltr"] .content,
-html[dir="ltr"] .container,
-html[dir="ltr"] .wrapper {
-  direction: ltr !important;
-}
-
-/* ONLY apply text-align to legal page content that needs LTR alignment */
-html[dir="ltr"] .legal-content,
-html[dir="ltr"] .terms-content,
-html[dir="ltr"] .privacy-content,
-html[dir="ltr"] .legal-content p,
-html[dir="ltr"] .terms-content p,
-html[dir="ltr"] .privacy-content p,
-html[dir="ltr"] .legal-content li,
-html[dir="ltr"] .terms-content li,
-html[dir="ltr"] .privacy-content li {
-  direction: ltr !important;
-  text-align: left !important;
-}
-
-/* Base direction for RTL */
-html[dir="rtl"], html[dir="rtl"] body {
-  direction: rtl !important;
-}
-
-html[dir="rtl"] main,
-html[dir="rtl"] article,
-html[dir="rtl"] section,
-html[dir="rtl"] .content,
-html[dir="rtl"] .container,
-html[dir="rtl"] .wrapper {
-  direction: rtl !important;
-}
-
-/* ONLY apply text-align to legal page content that needs RTL alignment */
-.legal-content,
-html[dir="rtl"] .terms-content,
-html[dir="rtl"] .privacy-content,
-html[dir="rtl"] .legal-content p,
-html[dir="rtl"] .terms-content p,
-html[dir="rtl"] .privacy-content p,
-html[dir="rtl"] .legal-content li,
-html[dir="rtl"] .terms-content li,
-html[dir="rtl"] .privacy-content li{text-align: right !important;}html[dir="rtl"] .legal-content,
-html[dir="rtl"] .terms-content,
-html[dir="rtl"] .privacy-content,
-html[dir="rtl"] .legal-content p,
-html[dir="rtl"] .terms-content p,
-html[dir="rtl"] .privacy-content p,
-html[dir="rtl"] .legal-content li,
-html[dir="rtl"] .terms-content li,
-html[dir="rtl"] .privacy-content li{direction: rtl !important;}
-
-
-/* ============================================
-   V2 NAVIGATION FIX
-   CRITICAL: For V2 sites created in RTL (Hebrew), the nav elements
-   inherit direction:rtl from the body. This reverses how flex order
-   is interpreted. For LTR pages, we MUST set direction:ltr on nav
-   containers to make the flex order work correctly.
-   
-   This section is ONLY included for V2 sites (detected by nav-right-group
-   or nav-cta-container classes) to avoid affecting V1 site layouts.
-   ============================================ */
-
-/* Fix V2 navbar layout for LTR pages */
-/* Direction must apply to all screen sizes, but flex-direction: row is desktop-only */
-html[dir="ltr"] header,
-html[dir="ltr"] nav,
-html[dir="ltr"] .navbar,
-html[dir="ltr"] .nav-container {
-  direction: ltr !important;
-}
-
-html[dir="ltr"] .nav-right-group {
-  direction: ltr !important;
-  order: -1 !important;
-}
-
-html[dir="ltr"] .nav-cta-container {
-  direction: ltr !important;
-  order: 1 !important;
-  margin-left: auto !important;
-}
-
-html[dir="ltr"] .nav-menu,
-html[dir="ltr"] #navMenu {
-  direction: ltr !important;
-}
-
-html[dir="ltr"] .nav-brand {
-  direction: ltr !important;
-  order: -1 !important;
-}
-
-/* DESKTOP ONLY: Horizontal flex layout for navbar elements */
-@media (min-width: 769px) {
-  html[dir="ltr"] header,
-  html[dir="ltr"] nav,
-  html[dir="ltr"] .navbar,
-  html[dir="ltr"] .nav-container {
-    flex-direction: row !important;
-  }
-  
-  html[dir="ltr"] .nav-right-group,
-  html[dir="ltr"] .nav-cta-container {
-    flex-direction: row !important;
-  }
-  
-  html[dir="ltr"] .nav-menu,
-  html[dir="ltr"] #navMenu {
-    flex-direction: row !important;
-  }
-}
-
-
-/* Language Switcher Container - Fixed Position */
-.zappy-lang-switcher-container {
-  position: fixed;
-  top: 12px;
-  right: 12px;
-  z-index: 9999;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-}
-
-/* RTL: Move to left side */
-.zappy-lang-switcher-container{right: auto;left: 12px;}
-
-/* Language Switcher Styles */
-.lang-switcher {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  z-index: 1000;
-}
-
-/* Language switcher positioning - minimal, only gap spacing */
-/* NOTE: Removed margin-left:auto rules that broke V2 layouts */
-/* V2 layouts handle positioning via flexbox, we just add small gap */
-header .lang-switcher,
-nav .lang-switcher,
-.navbar .lang-switcher {
-  margin-left: 8px;
-  margin-right: 8px;
-}
-
-.lang-switcher-current {
-  display: flex;
-  align-items: center;
-  padding: 8px;
-  background: transparent;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  color: inherit;
-  transition: opacity 0.2s ease;
-}
-
-.lang-switcher-current:hover {
-  opacity: 0.7;
-}
-
-/* ===========================================
-   LANGUAGE DROPDOWN POSITIONING
-   CRITICAL: position: absolute !important overrides any
-   mobile responsive CSS that resets absolute positioning
-   to relative. The dropdown MUST be absolutely positioned
-   relative to its parent .lang-switcher.
-   
-   HIGH SPECIFICITY SELECTORS needed to override:
-   [style*="position: absolute"]:not(...) { position: relative !important }
-   That selector has specificity ~0,4,0 so we need 0,5,0+ to win
-   =========================================== */
-.lang-switcher-dropdown,
-.lang-switcher .lang-switcher-dropdown,
-div.lang-switcher-dropdown,
-.nav-cta-container .lang-switcher .lang-switcher-dropdown,
-.navbar .nav-cta-container .lang-switcher-dropdown {
-  position: absolute !important;
-  top: 100% !important;
-  /* Default LTR: align dropdown's left edge to switcher's left edge */
-  left: 0;
-  right: auto;
-  margin-top: 6px;
-  min-width: 150px;
-  background: white;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-  opacity: 0;
-  visibility: hidden;
-  transform: translateY(-8px);
-  transition: all 0.2s ease;
-  overflow: hidden;
-  z-index: 1002 !important;
-}
-
-/* Ultra-high specificity override for problematic mobile responsive CSS */
-/* The problematic rule [style*="position: absolute"]:not():not():not() has specificity 0,4,0 */
-/* We need 0,5,0+ to win, so we add extra class/attribute selectors */
-.lang-switcher .lang-switcher-dropdown[style*="position: absolute"],
-.lang-switcher .lang-switcher-dropdown[style*="position:absolute"],
-.nav-cta-container .lang-switcher .lang-switcher-dropdown[style],
-.navbar .nav-cta-container .lang-switcher-dropdown[style],
-div.lang-switcher > div.lang-switcher-dropdown[style] {
-  position: absolute !important;
-  top: 100% !important;
-  /* Default LTR: align to left */
-  left: 0;
-  right: auto;
-}
-
-.lang-option {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  width: 100%;
-  padding: 12px 16px;
-  background: none;
-  border: none;
-  text-align: left;
-  cursor: pointer;
-  font-size: 14px;
-  color: #333;
-  transition: background 0.15s ease;
-}
-
-.lang-option{text-align: right;}
-
-/* RTL: align dropdown's right edge to switcher's right edge */
-.lang-switcher-dropdown,
-html[lang="he"] .lang-switcher-dropdown,
-html[lang="ar"] .lang-switcher-dropdown{right: 0;left: auto;}
-
-.lang-option:hover {
-  background: #f5f5f5;
-}
-
-/* Mobile responsive */
-@media (max-width: 768px) {
-  .zappy-lang-switcher-container {
-    top: 8px;
-    right: 8px;
-  }
-  
-  .zappy-lang-switcher-container{right: auto;left: 8px;}
-  
-  .lang-switcher-current {
-    padding: 6px;
-  }
-  
-  .lang-option {
-    padding: 10px 14px;
-    font-size: 13px;
-  }
-  
-  /* FIX: Prevent lang-switcher-dropdown from extending past viewport in RTL mobile */
-  /* The dropdown was causing horizontal overflow with left: 0 in RTL */
-  .lang-switcher-dropdown{left: auto !important;right: 0 !important;}
-}
-
-/* ===========================================
-   RTL MOBILE HORIZONTAL OVERFLOW FIX
-   Prevents left whitespace gap in RTL mobile
-   caused by elements extending past viewport
-   =========================================== */
-
-/* Prevent horizontal scroll on RTL pages */
-,
-html[dir="rtl"] body{overflow-x: hidden !important;max-width: 100vw !important;}
-
-/* Ensure carousel containers clip overflow to prevent horizontal scroll */
-.zappy-carousel-container,
-.zappy-carousel-wrapper,
-.benefits-section,
-.testimonials-section,
-[class*="carousel"] {
-  overflow-x: hidden !important;
-}
-
-/* Ensure lang-switcher parent clips its positioned children */
-.lang-switcher {
-  overflow: visible; /* Keep visible for dropdown to show */
-}
-
-/* ===========================================
-   MOBILE NAV BUTTON POSITIONING
-   CSS handles positioning based on html[dir] attribute.
-   This allows dynamic RTL/LTR switching without inline styles.
-   
-   LTR (default): hamburger LEFT (20px), phone RIGHT (20px)
-   RTL: hamburger RIGHT (20px), phone LEFT (20px) - mirrored
-   =========================================== */
-@media (max-width: 768px) {
-  /* Base positioning and visibility for mobile nav buttons */
-  /* CRITICAL: display: flex overrides any desktop display: none rules */
-  .mobile-toggle,
-  .phone-header-btn {
-    display: flex !important;
-    position: absolute !important;
-    top: 50% !important;
-    transform: translateY(-50%) !important;
-    z-index: 1001 !important;
-    align-items: center !important;
-    justify-content: center !important;
-    width: 44px !important;
-    height: 44px !important;
-    background: none !important;
-    border: none !important;
-    cursor: pointer !important;
-  }
-  
-  /* Phone button color - use accent color for visibility */
-  .phone-header-btn {
-    color: var(--accent, #f59e0b) !important;
-  }
-  
-  .phone-header-btn svg {
-    width: 24px !important;
-    height: 24px !important;
-    fill: currentColor !important;
-  }
-  
-  /* LTR positioning (default) - hamburger LEFT, phone RIGHT */
-  html:not([dir="rtl"]):not([lang="he"]):not([lang="ar"]) .mobile-toggle,
-  html[dir="ltr"] .mobile-toggle {
-    left: 20px !important;
-    right: auto !important;
-  }
-  
-  html:not([dir="rtl"]):not([lang="he"]):not([lang="ar"]) .phone-header-btn,
-  html[dir="ltr"] .phone-header-btn {
-    right: 20px !important;
-    left: auto !important;
-  }
-  
-  /* LTR mobile menu slides from LEFT */
-  html:not([dir="rtl"]):not([lang="he"]):not([lang="ar"]) .nav-menu,
-  html[dir="ltr"] .nav-menu {
-    left: 0 !important;
-    right: auto !important;
-  }
-  
-  /* ===========================================
-     MOBILE NAV MENU - VERTICAL LAYOUT FIX
-     CRITICAL: Override any desktop flex-direction: row rules
-     The mobile menu MUST stack vertically (column), not horizontally (row)
-     =========================================== */
-  html[dir="ltr"] .nav-menu,
-  html[dir="ltr"] .nav-menu.active,
-  html[dir="ltr"] #navMenu,
-  html[dir="ltr"] #navMenu.active,
-  html:not([dir="rtl"]):not([lang="he"]):not([lang="ar"]) .nav-menu,
-  html:not([dir="rtl"]):not([lang="he"]):not([lang="ar"]) .nav-menu.active {
-    flex-direction: column !important;
-    align-items: stretch !important;
-  }
-  
-  /* RTL mobile menu - also vertical layout */
-  .nav-menu,
-  html[dir="rtl"] .nav-menu.active,
-  html[dir="rtl"] #navMenu,
-  html[dir="rtl"] #navMenu.active,
-  html[lang="he"] .nav-menu,
-  html[lang="he"] .nav-menu.active,
-  html[lang="ar"] .nav-menu,
-  html[lang="ar"] .nav-menu.active{flex-direction: column !important;align-items: stretch !important;}
-  
-  /* LTR mobile menu text alignment - left aligned */
-  html:not([dir="rtl"]):not([lang="he"]):not([lang="ar"]) .nav-menu li,
-  html:not([dir="rtl"]):not([lang="he"]):not([lang="ar"]) .nav-menu a,
-  html[dir="ltr"] .nav-menu li,
-  html[dir="ltr"] .nav-menu a {
-    text-align: left !important;
-  }
-  
-  /* ===========================================
-     LTR MOBILE NAV-CONTAINER LAYOUT FIX
-     V2 sites have nav-container with flex-direction: row-reverse
-     for RTL. For LTR, we need flex-direction: row and centered logo.
-     =========================================== */
-  html[dir="ltr"] .nav-container,
-  html:not([dir="rtl"]):not([lang="he"]):not([lang="ar"]) .nav-container {
-    flex-direction: row !important;
-    justify-content: center !important;
-  }
-  
-  /* LTR: Center the logo/nav-brand in mobile navbar */
-  html[dir="ltr"] .nav-brand,
-  html:not([dir="rtl"]):not([lang="he"]):not([lang="ar"]) .nav-brand {
-    order: 0 !important;
-    margin: 0 auto !important;
-  }
-  
-  /* RTL: Center the logo/nav-brand in mobile navbar */
-  .nav-brand,
-  html[lang="he"] .nav-brand,
-  html[lang="ar"] .nav-brand{order: 0 !important;margin: 0 auto !important;}
-  
-  /* RTL lang-switcher dropdown constraint */
-  .lang-switcher{position: relative;}
-  
-  .lang-switcher-dropdown{left: auto !important;right: 0 !important;max-width: calc(100vw - 20px);}
-  
-  /* ===========================================
-     RTL MOBILE NAV BUTTON POSITIONING
-     In RTL: hamburger RIGHT, phone LEFT (mirror of LTR)
-     =========================================== */
-  .mobile-toggle,
-  html[lang="he"] .mobile-toggle,
-  html[lang="ar"] .mobile-toggle{left: auto !important;right: 20px !important;}
-  
-  .phone-header-btn,
-  html[lang="he"] .phone-header-btn,
-  html[lang="ar"] .phone-header-btn{left: 20px !important;right: auto !important;}
-  
-  /* RTL mobile menu slides from RIGHT */
-  .nav-menu,
-  html[lang="he"] .nav-menu,
-  html[lang="ar"] .nav-menu{left: auto !important;right: 0 !important;}
-  
-  /* ===========================================
-     V2 MOBILE LANGUAGE SWITCHER FIX
-     V2 sites hide .nav-cta-container on mobile but we need
-     the language switcher to remain visible. Position it
-     between the phone button and the hamburger menu.
-     =========================================== */
-  .nav-cta-container {
-    display: flex !important;
-    position: absolute !important;
-    top: 50% !important;
-    transform: translateY(-50%) !important;
-    background: transparent !important;
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    width: auto !important;
-    height: auto !important;
-    max-height: none !important;
-    overflow: visible !important;
-    z-index: 1001 !important;
-  }
-  
-  /* Hide CTA button inside container on mobile */
-  .nav-cta-container .nav-cta-btn,
-  .nav-cta-container > a:not(.lang-option):not(.lang-switcher-current) {
-    display: none !important;
-  }
-  
-  /* Keep language switcher visible and compact */
-  .nav-cta-container .lang-switcher {
-    display: flex !important;
-    margin: 0 !important;
-    width: auto !important;
-    position: relative !important;
-  }
-  
-  /* ===========================================
-     MOBILE LANGUAGE DROPDOWN POSITIONING FIX
-     CRITICAL: Override the mobile responsive CSS that sets
-     [style*="position: absolute"]:not():not():not() { position: relative !important }
-     That rule has specificity 0,4,0 - we need 0,5,0+ to win.
-     The dropdown MUST use position: absolute to appear below the button.
-     =========================================== */
-  .navbar .nav-cta-container .lang-switcher .lang-switcher-dropdown,
-  .nav-cta-container .lang-switcher .lang-switcher-dropdown[style],
-  .lang-switcher .lang-switcher-dropdown[style*="position"],
-  div.lang-switcher > div.lang-switcher-dropdown[style],
-  [class*="lang-switcher"] .lang-switcher-dropdown[style] {
-    position: absolute !important;
-    top: 100% !important;
-    margin-top: 8px !important;
-    min-width: 140px !important;
-    background: white !important;
-    border-radius: 8px !important;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15) !important;
-    z-index: 1002 !important;
-    /* Override any transform that might affect positioning */
-    transform: none !important;
-  }
-  
-  /* When dropdown is visible, ensure positioning is correct - high specificity */
-  .navbar .nav-cta-container .lang-switcher-dropdown[style*="visibility: visible"],
-  .navbar .nav-cta-container .lang-switcher-dropdown[style*="opacity: 1"],
-  .lang-switcher .lang-switcher-dropdown[style*="visibility: visible"],
-  .lang-switcher .lang-switcher-dropdown[style*="opacity: 1"] {
-    position: absolute !important;
-    top: 100% !important;
-  }
-  
-  /* LTR: dropdown aligns to left - high specificity to override [style*] rules */
-  html:not([dir="rtl"]):not([lang="he"]):not([lang="ar"]) .navbar .lang-switcher-dropdown,
-  html:not([dir="rtl"]):not([lang="he"]):not([lang="ar"]) .lang-switcher .lang-switcher-dropdown,
-  html[dir="ltr"] .navbar .lang-switcher-dropdown,
-  html[dir="ltr"] .lang-switcher .lang-switcher-dropdown {
-    left: 0 !important;
-    right: auto !important;
-  }
-  
-  /* RTL: dropdown aligns to right - high specificity to override [style*] rules */
-  .navbar .lang-switcher-dropdown,
-  html[dir="rtl"] .lang-switcher .lang-switcher-dropdown,
-  html[lang="he"] .navbar .lang-switcher-dropdown,
-  html[lang="he"] .lang-switcher .lang-switcher-dropdown,
-  html[lang="ar"] .navbar .lang-switcher-dropdown,
-  html[lang="ar"] .lang-switcher .lang-switcher-dropdown{right: 0 !important;left: auto !important;}
-  
-  /* LTR: position near hamburger (which is at left: 20px), to its right */
-  html:not([dir="rtl"]):not([lang="he"]):not([lang="ar"]) .nav-cta-container,
-  html[dir="ltr"] .nav-cta-container {
-    left: 30px !important;
-    right: auto !important;
-  }
-  
-  /* RTL: position near hamburger (which is at right: 20px) */
-  /* nav-cta-container is inside nav-container, so we position it at the right edge */
-  /* of nav-container to get it closer to the hamburger */
-  .nav-cta-container,
-  html[lang="he"] .nav-cta-container,
-  html[lang="ar"] .nav-cta-container{right: 30px !important;left: auto !important;}
-  
-  /* Language switcher preserves its inline color/fill set during generation */
-}
-
-
 
 /* ========== RTL MOBILE NAVBAR FIX (zappy-rtl-mobile-fix) ========== */
 /* High-specificity rules to ensure RTL positioning wins over any [lang="en"] conflicts */

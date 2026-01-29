@@ -503,6 +503,52 @@ window.onload = function() {
 })();
 
 ;
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   MOBILE TOGGLE CLICK HANDLER FIX (Backup handler if original fails)
+   ═══════════════════════════════════════════════════════════════════════════ */
+(function initMobileToggleFix() {
+  var mobileToggle = document.getElementById('mobileToggle') || document.querySelector('.mobile-toggle');
+  var navMenu = document.getElementById('navMenu') || document.querySelector('.nav-menu');
+  
+  if (!mobileToggle || !navMenu) return;
+  
+  // Check if handler already works by testing for active class toggle
+  var testHandler = function() {
+    mobileToggle.removeEventListener('click', testHandler);
+    
+    // Add our backup handler
+    mobileToggle.addEventListener('click', function(e) {
+      e.stopPropagation();
+      var hamburgerIcon = this.querySelector('.hamburger-icon');
+      var closeIcon = this.querySelector('.close-icon');
+      var isActive = navMenu.classList.contains('active');
+      
+      if (isActive) {
+        if (hamburgerIcon) hamburgerIcon.style.display = 'block';
+        if (closeIcon) closeIcon.style.display = 'none';
+        navMenu.classList.remove('active');
+        document.body.style.overflow = '';
+      } else {
+        if (hamburgerIcon) hamburgerIcon.style.display = 'none';
+        if (closeIcon) closeIcon.style.display = 'block';
+        navMenu.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      }
+    });
+  };
+  
+  // Wait for DOM ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', testHandler);
+  } else {
+    testHandler();
+  }
+})();
+
+;
+
+;
 /* ==ZAPPY E-COMMERCE JS START== */
 // E-commerce functionality
 (function() {
@@ -644,6 +690,7 @@ window.onload = function() {
   function sanitizeEmail(str) {
     return (str || '').replace(/[‎‏‪-‮⁦-⁩​-‍﻿]/g, '').trim();
   }
+  
   
   function saveCart() {
     localStorage.setItem('zappy_cart_' + websiteId, JSON.stringify(cart));
@@ -850,10 +897,14 @@ window.onload = function() {
     grid.className = 'product-grid layout-' + productLayout;
     
     grid.innerHTML = products.map(function(p) {
+      // Check if price should be displayed (default to true if not set)
+      var showPrice = p.custom_fields?.showPrice !== false;
       var hasSalePrice = p.sale_price && parseFloat(p.sale_price) < parseFloat(p.price);
-      var displayPrice = hasSalePrice 
-        ? t.currency + parseFloat(p.sale_price).toFixed(2) + '<span class="original-price">' + t.currency + parseFloat(p.price).toFixed(2) + '</span>'
-        : t.currency + parseFloat(p.price).toFixed(2);
+      var displayPrice = showPrice 
+        ? (hasSalePrice 
+          ? t.currency + parseFloat(p.sale_price).toFixed(2) + '<span class="original-price">' + t.currency + parseFloat(p.price).toFixed(2) + '</span>'
+          : t.currency + parseFloat(p.price).toFixed(2))
+        : '';
       
       // Get first image with correct URL in preview/live
       var imageUrl = p.images && p.images[0] ? resolveProductImageUrl(p.images[0]) : '';
@@ -884,13 +935,16 @@ window.onload = function() {
       // Get localized "Add to Cart" text
       var localizedAddToCart = getEcomText('addToCart', t.addToCart);
       
+      // Only include price div if showPrice is true
+      var priceHtml = showPrice ? '<div class="price">' + displayPrice + '</div>' : '';
+      
       if (productLayout === 'compact') {
         // Compact: image, name, price only
         cardContent = tagsHtml +
           '<a href="/product/' + (p.slug || p.id) + '" class="product-card-link">' +
             imageHtml +
             '<h3>' + p.name + '</h3>' +
-            '<div class="price">' + displayPrice + '</div>' +
+            priceHtml +
           '</a>';
       } else if (productLayout === 'detailed') {
         // Detailed: image, name, full description, price, add-to-cart
@@ -899,7 +953,7 @@ window.onload = function() {
             imageHtml +
             '<h3>' + p.name + '</h3>' +
             '<p>' + (p.description || '').substring(0, 150) + (p.description?.length > 150 ? '...' : '') + '</p>' +
-            '<div class="price">' + displayPrice + '</div>' +
+            priceHtml +
           '</a>' +
           '<button class="add-to-cart" onclick="event.stopPropagation(); window.zappyHandleAddToCart(' + JSON.stringify(p).replace(/"/g, '&quot;') + ')">' + localizedAddToCart + '</button>';
       } else {
@@ -909,7 +963,7 @@ window.onload = function() {
             imageHtml +
             '<h3>' + p.name + '</h3>' +
             '<p>' + (p.description || '').substring(0, 80) + (p.description?.length > 80 ? '...' : '') + '</p>' +
-            '<div class="price">' + displayPrice + '</div>' +
+            priceHtml +
           '</a>';
       }
       
@@ -945,7 +999,7 @@ window.onload = function() {
       total += itemPrice * item.quantity;
       const variantInfo = item.variantName ? '<div class="cart-item-variant">' + item.variantName + '</div>' : '';
       return '<div class="cart-item" data-item-id="' + item.id + (item.selectedVariant ? '-' + item.selectedVariant.id : '') + '">' +
-        '<img src="' + (item.images?.[0] || 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2270%22 height=%2270%22 viewBox=%220 0 70 70%22%3E%3Crect fill=%22%23f3f4f6%22 width=%2270%22 height=%2270%22/%3E%3Cpath fill=%22%239ca3af%22 d=%22M28 25h14v14H28z%22/%3E%3C/svg%3E') + '" alt="' + item.name + '">' +
+        '<img src="' + (resolveProductImageUrl(item.images?.[0]) || 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2270%22 height=%2270%22 viewBox=%220 0 70 70%22%3E%3Crect fill=%22%23f3f4f6%22 width=%2270%22 height=%2270%22/%3E%3Cpath fill=%22%239ca3af%22 d=%22M28 25h14v14H28z%22/%3E%3C/svg%3E') + '" alt="' + item.name + '">' +
         '<div class="cart-item-info">' +
           '<div class="cart-item-name">' + item.name + '</div>' +
           variantInfo +
@@ -1046,7 +1100,7 @@ window.onload = function() {
       const variantInfo = item.variantName ? '<br><span style="font-size:12px;color:#6b7280;">' + item.variantName + '</span>' : '';
       const compositeId = item.selectedVariant ? item.id + '-' + item.selectedVariant.id : item.id;
       return '<div class="cart-item">' +
-        '<img src="' + (item.images?.[0] || '') + '" alt="' + item.name + '">' +
+        '<img src="' + (resolveProductImageUrl(item.images?.[0]) || '') + '" alt="' + item.name + '">' +
         '<div><strong>' + item.name + '</strong>' + variantInfo + '<br>' + t.currency + itemPrice.toFixed(2) + ' x ' + item.quantity + '</div>' +
         '<button onclick="window.zappyRemoveFromCart(\'' + compositeId + '\')">' + t.remove + '</button>' +
       '</div>';
@@ -1714,7 +1768,7 @@ window.onload = function() {
     
     let html = results.map(p => 
       '<a href="/product/' + (p.slug || p.id) + '" class="search-result-item">' +
-        (p.images?.[0] ? '<img src="' + p.images[0] + '" alt="' + p.name + '" class="search-result-img">' : '<div class="search-result-img"></div>') +
+        (p.images?.[0] ? '<img src="' + resolveProductImageUrl(p.images[0]) + '" alt="' + p.name + '" class="search-result-img">' : '<div class="search-result-img"></div>') +
         '<div class="search-result-info">' +
           '<div class="search-result-name">' + p.name + '</div>' +
           '<div class="search-result-price">' + t.currency + p.price + '</div>' +
@@ -2164,7 +2218,7 @@ window.onload = function() {
     
     let html = matches.slice(0, 8).map(function(p) {
       const price = formatPrice(p.price);
-      const img = p.images && p.images[0] ? p.images[0] : '';
+      const img = p.images && p.images[0] ? resolveProductImageUrl(p.images[0]) : '';
       return '<a href="/product/' + p.slug + '" class="search-result-item">' +
         (img ? '<img src="' + img + '" alt="' + p.name + '" class="search-result-img">' : '') +
         '<div class="search-result-info">' +
@@ -3390,7 +3444,7 @@ async function loadFeaturedCategories() {
     
     // Render category blocks with SEO-friendly slug URLs
     container.innerHTML = data.data.map(function(cat) {
-      const imageUrl = cat.image || '';
+      const imageUrl = resolveProductImageUrl(cat.image) || '';
       // Use SEO-friendly slug URL, fallback to id for backward compatibility
       const categoryUrl = '/category/' + (cat.slug || cat.id);
       return '<a href="' + categoryUrl + '" class="category-block" data-category-id="' + cat.id + '" data-category-slug="' + (cat.slug || '') + '">' +
@@ -3433,10 +3487,14 @@ function renderProductGrid(grid, products, t, isFeaturedSection) {
   var localizedAddToCart = getEcomText('addToCart', t.addToCart);
   
   grid.innerHTML = products.map(p => {
+    // Check if price should be displayed (default to true if not set)
+    const showPrice = p.custom_fields?.showPrice !== false;
     const hasSalePrice = p.sale_price && parseFloat(p.sale_price) < parseFloat(p.price);
-    const displayPrice = hasSalePrice 
-      ? t.currency + parseFloat(p.sale_price).toFixed(2) + '<span class="original-price">' + t.currency + parseFloat(p.price).toFixed(2) + '</span>'
-      : t.currency + parseFloat(p.price).toFixed(2);
+    const displayPrice = showPrice 
+      ? (hasSalePrice 
+        ? t.currency + parseFloat(p.sale_price).toFixed(2) + '<span class="original-price">' + t.currency + parseFloat(p.price).toFixed(2) + '</span>'
+        : t.currency + parseFloat(p.price).toFixed(2))
+      : '';
     
     // Get first image with correct URL in preview/live
     var imageUrl = p.images && p.images[0]
@@ -3467,13 +3525,16 @@ function renderProductGrid(grid, products, t, isFeaturedSection) {
     var imageHtml = imageUrl ? '<img src="' + imageUrl + '" alt="' + p.name + '">' : '<div class="no-image-placeholder">📦</div>';
     var layout = additionalJsProductLayout || 'standard';
     
+    // Only include price div if showPrice is true
+    var priceHtml = showPrice ? '<div class="price">' + displayPrice + '</div>' : '';
+    
     if (layout === 'compact') {
       // Compact: image, name, price only
       cardContent = tagsHtml +
         '<a href="/product/' + (p.slug || p.id) + '" class="product-card-link">' +
           imageHtml +
           '<h3>' + p.name + '</h3>' +
-          '<div class="price">' + displayPrice + '</div>' +
+          priceHtml +
         '</a>';
     } else if (layout === 'detailed') {
       // Detailed: image, name, full description, price, add-to-cart
@@ -3482,7 +3543,7 @@ function renderProductGrid(grid, products, t, isFeaturedSection) {
           imageHtml +
           '<h3>' + p.name + '</h3>' +
           '<p>' + (p.description || '').substring(0, 150) + (p.description?.length > 150 ? '...' : '') + '</p>' +
-          '<div class="price">' + displayPrice + '</div>' +
+          priceHtml +
         '</a>' +
         '<button class="add-to-cart" onclick="event.stopPropagation(); window.zappyHandleAddToCart(' + JSON.stringify(p).replace(/"/g, '&quot;') + ')">' + localizedAddToCart + '</button>';
     } else {
@@ -3492,7 +3553,7 @@ function renderProductGrid(grid, products, t, isFeaturedSection) {
           imageHtml +
           '<h3>' + p.name + '</h3>' +
           '<p>' + (p.description || '').substring(0, 80) + (p.description?.length > 80 ? '...' : '') + '</p>' +
-          '<div class="price">' + displayPrice + '</div>' +
+          priceHtml +
         '</a>';
     }
     
@@ -3816,7 +3877,7 @@ function renderCategoryPage(container, category, t) {
   
   // Render category header
   if (headerContainer) {
-    const categoryImage = category.image ? '<div class="category-banner" style="background-image: url(\'' + category.image + '\')"></div>' : '';
+    const categoryImage = category.image ? '<div class="category-banner" style="background-image: url(\'' + resolveProductImageUrl(category.image) + '\')"></div>' : '';
     headerContainer.innerHTML = categoryImage + '<div class="category-info"><h1>' + category.name + '</h1>' + 
       (category.description ? '<p class="category-description">' + category.description + '</p>' : '') + 
       '</div>';
@@ -3897,6 +3958,8 @@ function renderProductDetail(container, product, t) {
   const hasSalePrice = product.sale_price && parseFloat(product.sale_price) < parseFloat(product.price);
   const basePrice = hasSalePrice ? parseFloat(product.sale_price) : parseFloat(product.price);
   const originalPrice = parseFloat(product.price);
+  // Check if price should be displayed (default to true if not set)
+  const showPrice = product.custom_fields?.showPrice !== false;
   
   // Check if product has variants
   const variants = product.variants || [];
@@ -3992,12 +4055,14 @@ function renderProductDetail(container, product, t) {
       </div>
       <div class="product-info">
         <h1>${product.name}</h1>
+        ${showPrice ? `
         <div class="product-price" id="product-price-display">
           ${hasSalePrice 
             ? t.currency + product.sale_price + '<span class="original-price">' + t.currency + product.price + '</span>'
             : t.currency + product.price
           }
         </div>
+        ` : ''}
         ${product.sku ? '<div class="product-sku" id="product-sku-display">' + t.sku + ': ' + product.sku + '</div>' : ''}
         <div class="product-stock ${baseInStock ? 'in-stock' : 'out-of-stock'}" id="product-stock-display">
           ${baseInStock 
