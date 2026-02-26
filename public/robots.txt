@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://miss-lucy.zappy5.app/sitemap.xml
+Sitemap: https://maorsharon.co.il/sitemap.xml

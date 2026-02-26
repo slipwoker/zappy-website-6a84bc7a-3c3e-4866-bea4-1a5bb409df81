@@ -1,87 +1,75 @@
-# מיס לוסי — Generative Engine Optimization Map
-
-> A מזון ומסעדנות business.
+# Business — Generative Engine Optimization Map
 
 ---
 
 ## Pages
 
 ### Home
-https://miss-lucy.zappy5.app
+https://maorsharon.co.il
 
 ### About
-https://miss-lucy.zappy5.app/about
+https://maorsharon.co.il/about
 
 ### Menu
-https://miss-lucy.zappy5.app/menu
+https://maorsharon.co.il/menu
 
 ### Contact
-https://miss-lucy.zappy5.app/contact
+https://maorsharon.co.il/contact
 
 ### Products
-https://miss-lucy.zappy5.app/products
+https://maorsharon.co.il/products
 המוצרים שלנו - מיס לוסי
 
 ### Cart
-https://miss-lucy.zappy5.app/cart
+https://maorsharon.co.il/cart
 עגלת הקניות שלך
 
 ### Checkout
-https://miss-lucy.zappy5.app/checkout
+https://maorsharon.co.il/checkout
 תשלום
 
 ### Login
-https://miss-lucy.zappy5.app/login
+https://maorsharon.co.il/login
 התחברות לקוחות
 
 ### Account
-https://miss-lucy.zappy5.app/account
+https://maorsharon.co.il/account
 החשבון שלי
 
 ### Order Success
-https://miss-lucy.zappy5.app/order-success
+https://maorsharon.co.il/order-success
 תודה על ההזמנה
 
 ### Product Detail
-https://miss-lucy.zappy5.app/product/:slug
+https://maorsharon.co.il/product/:slug
 פרטי המוצר - מיס לוסי
 
 ### Category
-https://miss-lucy.zappy5.app/category/:slug
+https://maorsharon.co.il/category/:slug
 מוצרים - מיס לוסי
 
 ## Legal & Policy
 
 ### Privacy Policy
-https://miss-lucy.zappy5.app/privacy
+https://maorsharon.co.il/privacy
 Information about how user data is collected, stored, and protected.
 
 ### Terms & Conditions
-https://miss-lucy.zappy5.app/terms
+https://maorsharon.co.il/terms
 Legal terms describing service usage, rights, and policies.
 
 ### Accessibility Statement
-https://miss-lucy.zappy5.app/accessibility
+https://maorsharon.co.il/accessibility
 Information about WCAG compliance and accessibility features.
 
 ---
 
 # Business Context (for LLM understanding)
 
-## About מיס לוסי
-מיס לוסי is a business in the מזון ומסעדנות industry.
-
-## Target Audience
-- חובבי אוכל עירוניים
-- מבקרי אירועי אוכל
-- אנשים שמודעים לבריאותם
-
-## Industry
-מזון ומסעדנות
-
+## About Business
 ---
 
 # Additional Resources
 
-- **Sitemap**: https://miss-lucy.zappy5.app/sitemap.xml
-- **Robots.txt**: https://miss-lucy.zappy5.app/robots.txt
+- **Sitemap**: https://maorsharon.co.il/sitemap.xml
+- **Robots.txt**: https://maorsharon.co.il/robots.txt
